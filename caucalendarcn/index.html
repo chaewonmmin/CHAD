@@ -6,9 +6,9 @@
   <div class="topnav-inner">
     <span class="brand">CAU 学历日历 · 강의평</span>
     <div class="tabs">
-      <a href="index.html" class="tab-link active">학사일정 · 日历</a>
-      <a href="reviews.html" class="tab-link">강의평 · 点评</a>
-      <a href="board.html" class="tab-link">广场 · 게시판</a>
+      <a href="index.html" class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>학사일정 · 日历</span></a>
+      <a href="reviews.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span>강의평 · 点评</span></a>
+      <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span>广场 · 게시판</span></a>
     </div>
   </div>
 </nav>
@@ -25,6 +25,8 @@
     <button class="btn-primary" id="downloadAll">⬇ 下载完整学期日历(.ics)</button>
     <span class="btn" style="border-style:dashed; color:var(--ink-soft); cursor:default;">提醒会在到期前 3 天自动提示</span>
   </div>
+
+  <div class="notice" id="noticeBanner" hidden></div>
 
   <div id="calendar"></div>
   <div class="cal-detail empty" id="calendarDetail">点击日历上有颜色标记的日期查看详细安排 · 색이 있는 날짜를 클릭하면 상세 일정이 표시됩니다.</div>
@@ -179,10 +181,13 @@
   const cal = document.getElementById("calendar");
 
   monthRangeFromEvents(EVENTS).forEach(({ year, month }) => {
+    const monthCard = document.createElement("div");
+    monthCard.className = "cal-card";
+
     const label = document.createElement("p");
     label.className = "month-label";
     label.textContent = `${year}年${month}月 · ${year}년 ${month}월`;
-    cal.appendChild(label);
+    monthCard.appendChild(label);
 
     const grid = document.createElement("div");
     grid.className = "cal-grid";
@@ -228,10 +233,32 @@
       grid.appendChild(dayCell);
     }
 
-    cal.appendChild(grid);
+    monthCard.appendChild(grid);
+    cal.appendChild(monthCard);
   });
 
   document.getElementById("downloadAll").addEventListener("click", () => {
     download("2026-2학기-학사일정.ics", buildVCALENDAR(EVENTS.map(buildVEVENT)));
   });
+
+  // D-day 알림: 오늘 이후로 가장 가까운 일정을 자동으로 계산해서 보여줌
+  function renderNotice(){
+    const banner = document.getElementById("noticeBanner");
+    if (!banner) return;
+    const todayIso = new Date().toISOString().slice(0, 10);
+    const upcoming = EVENTS
+      .filter(ev => ev.start >= todayIso)
+      .sort((a, b) => a.start.localeCompare(b.start))[0];
+    if (!upcoming) { banner.hidden = true; return; }
+    const today = new Date(); today.setHours(0, 0, 0, 0);
+    const target = new Date(upcoming.start + "T00:00:00");
+    const d = Math.round((target - today) / 86400000);
+    const label = d === 0 ? "D-DAY" : `D-${d}`;
+    banner.hidden = false;
+    banner.innerHTML =
+      `<span class="dd">${label}</span>` +
+      `<span class="tx"><b>${upcoming.zh}</b> · ${upcoming.ko}</span>` +
+      `<span class="dt">${upcoming.start.slice(5).replace("-", ".")}</span>`;
+  }
+  renderNotice();
 </script>
