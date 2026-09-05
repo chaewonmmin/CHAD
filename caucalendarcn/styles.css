@@ -179,49 +179,63 @@ button:focus-visible, .btn:focus-visible, a:focus-visible{
   padding:16px 14px 14px; margin-bottom:14px;
 }
 
-.cal-grid{
+.cal-weekday-row{
   display:grid;
-  grid-template-columns:repeat(7, 1fr);
-  gap:2px;
+  grid-template-columns:repeat(7, minmax(0,1fr));
 }
 .cal-weekday{
   font-size:11px; color:var(--ink-faint); text-align:center;
   padding-bottom:6px; display:flex; flex-direction:column; line-height:1.3;
 }
 .cal-weekday-ko{font-size:9px; color:var(--ink-faint);}
+
+/* 달력을 실제 표(table)처럼: 바깥 테두리는 그리드 컨테이너가, 안쪽 칸 사이 선은
+   각 셀의 border-right/bottom이 담당해서 겹치는 두꺼운 선 없이 격자를 그린다.
+   요일 칸은 minmax(0,1fr)로 내용과 무관하게 항상 동일한 폭으로 고정된다. */
+.cal-grid{
+  display:flex; flex-direction:column;
+  border-top:1px solid var(--line); border-left:1px solid var(--line);
+}
+
+/* 한 주(week)를 하나의 그리드로: 1행=날짜 숫자, 2행부터는 이벤트 막대(bar) 레인.
+   막대는 grid-column을 span으로 지정해 여러 날짜 칸을 가로지르는 하나의
+   요소로 이어 그려진다. 막대 높이는 고정값(.cal-bar 참고)이라 레인 행도 항상
+   같은 높이를 가지며, 각 .cal-day는 그 주의 전체 행(날짜 숫자 + 레인 전부)을
+   span해서 하나의 통 셀이 되므로 같은 줄의 7칸 높이가 항상 완전히 같아진다. */
+.cal-week{
+  display:grid;
+  grid-template-columns:repeat(7, minmax(0,1fr));
+  grid-auto-rows:minmax(15px, auto);
+  row-gap:2px; /* 날짜 숫자 줄, 그리고 쌓인 이벤트 막대 사이에 항상 동일한 간격을 줌 */
+  min-height:64px; /* 이벤트 없는 주도 이 높이 이상을 유지해 다음 주와의 구분선이 항상 보이게 함 */
+}
 .cal-day{
-  height:62px;
   box-sizing:border-box;
-  border:none;
-  padding:4px 3px;
-  display:flex; flex-direction:column; gap:2px;
+  padding:2px 3px 0;
   background:transparent;
-  overflow:hidden;
+  border-right:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+  min-width:0;
 }
 .cal-day.empty{background:transparent;}
 .cal-day .daynum{
-  flex:0 0 auto;
   font-size:11.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums;
   line-height:1.2;
 }
-.cal-day-events{
-  flex:1 1 auto;
-  overflow:hidden;
-  display:-webkit-box;
-  -webkit-line-clamp:2;
-  -webkit-box-orient:vertical;
-  line-clamp:2;
-  line-height:1.35;
-}
-.cal-chip{
-  display:inline-block; max-width:100%; vertical-align:top;
-  font:inherit; font-size:10px; text-align:left; line-height:1.35;
-  border:none; border-radius:6px; margin:0 2px 2px 0;
-  padding:1px 5px;
+/* 모든 이벤트 막대를 고정 height/padding/font-size로 통일한 칩(chip).
+   grid row는 내용에 맞춰 늘어날 수 있지만(align-self:start로 stretch를 끔),
+   막대 자체는 항상 정확히 같은 크기를 유지한다. */
+.cal-bar{
+  height:16px;
+  align-self:start;
+  min-width:0;
+  display:flex; align-items:center;
+  font:inherit; font-size:10px; text-align:left; line-height:1;
+  border:none; margin:0; padding:0 5px;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   cursor:pointer;
 }
-.cal-chip:hover{filter:brightness(0.94);}
+.cal-bar:hover{filter:brightness(0.94);}
 
 .cal-detail{
   margin-top:14px; padding:18px 16px;
@@ -312,9 +326,9 @@ footer{
 .review-state{font-size:14px; color:var(--ink-soft); padding:24px 4px;}
 
 @media (max-width:520px){
-  .cal-day{height:50px; padding:3px; gap:1px;}
+  .cal-day{padding:2px; min-height:15px;}
   .cal-day .daynum{font-size:10px;}
-  .cal-chip{font-size:9px; padding:1px 4px;}
+  .cal-bar{height:13px; font-size:8.5px; padding:0 3px;}
 }
 
 @media (max-width:480px){

@@ -25,7 +25,6 @@
   </header>
 
   <div class="toolbar">
-    <button class="btn-primary" id="downloadAll">⬇ 下载完整学期日历(.ics)</button>
     <span class="btn" style="border-style:dashed; color:var(--ink-soft); cursor:default;">提醒会在到期前 3 天自动提示</span>
   </div>
 
@@ -128,9 +127,6 @@
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   }
 
-  function eventsOnDay(iso){
-    return EVENTS.filter(ev => iso >= ev.start && iso <= ev.end);
-  }
   function daysInMonth(y, m){ return new Date(y, m, 0).getDate(); }
   function firstWeekdayOfMonth(y, m){ return new Date(y, m - 1, 1).getDay(); }
   function monthRangeFromEvents(events){
@@ -183,6 +179,47 @@
   const WEEKDAYS = [["日","일"],["一","월"],["二","화"],["三","수"],["四","목"],["五","금"],["六","토"]];
   const cal = document.getElementById("calendar");
 
+  // 한 달을 7칸씩 주(week) 단위로 쪼갠 배열로 변환. 월 앞뒤 빈 칸은 null.
+  function weeksOfMonth(year, month) {
+    const startWeekday = firstWeekdayOfMonth(year, month);
+    const totalDays = daysInMonth(year, month);
+    const cells = [];
+    for (let i = 0; i < startWeekday; i++) cells.push(null);
+    for (let d = 1; d <= totalDays; d++) cells.push(`${year}-${pad(month)}-${pad(d)}`);
+    while (cells.length % 7 !== 0) cells.push(null);
+    const weeks = [];
+    for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
+    return weeks;
+  }
+
+  // 해당 주(week)에 걸쳐있는 이벤트들을 요일 칸(0~6) 기준으로 clip하고,
+  // 겹치는 이벤트는 서로 다른 레인(줄)에 배치해서 여러 날짜를 가로지르는
+  // 막대(bar) 하나로 이어 그릴 수 있게 세그먼트 목록을 만든다.
+  function weekSegments(week) {
+    const isoList = week.filter(Boolean);
+    if (!isoList.length) return [];
+    const weekStart = isoList[0], weekEnd = isoList[isoList.length - 1];
+    const segs = [];
+    EVENTS.forEach(ev => {
+      if (ev.end < weekStart || ev.start > weekEnd) return;
+      const segStart = ev.start < weekStart ? weekStart : ev.start;
+      const segEnd = ev.end > weekEnd ? weekEnd : ev.end;
+      const startCol = week.indexOf(segStart);
+      const endCol = week.indexOf(segEnd);
+      if (startCol === -1 || endCol === -1) return;
+      segs.push({ ev, startCol, endCol, span: endCol - startCol + 1 });
+    });
+    segs.sort((a, b) => a.startCol - b.startCol || b.span - a.span);
+    const laneEnds = [];
+    segs.forEach(seg => {
+      let lane = laneEnds.findIndex(end => end < seg.startCol);
+      if (lane === -1) { lane = laneEnds.length; laneEnds.push(seg.endCol); }
+      else laneEnds[lane] = seg.endCol;
+      seg.lane = lane;
+    });
+    return segs;
+  }
+
   monthRangeFromEvents(EVENTS).forEach(({ year, month }) => {
     const monthCard = document.createElement("div");
     monthCard.className = "cal-card";
@@ -192,56 +229,60 @@
     label.textContent = `${year}年${month}月 · ${year}년 ${month}월`;
     monthCard.appendChild(label);
 
-    const grid = document.createElement("div");
-    grid.className = "cal-grid";
-
+    const weekdayRow = document.createElement("div");
+    weekdayRow.className = "cal-weekday-row";
     WEEKDAYS.forEach(([zh, ko]) => {
       const wd = document.createElement("div");
       wd.className = "cal-weekday";
       wd.innerHTML = `${zh}<span class="cal-weekday-ko">${ko}</span>`;
-      grid.appendChild(wd);
+      weekdayRow.appendChild(wd);
     });
+    monthCard.appendChild(weekdayRow);
 
-    const startWeekday = firstWeekdayOfMonth(year, month);
-    for (let i = 0; i < startWeekday; i++) {
-      const empty = document.createElement("div");
-      empty.className = "cal-day empty";
-      grid.appendChild(empty);
-    }
+    const grid = document.createElement("div");
+    grid.className = "cal-grid";
 
-    const totalDays = daysInMonth(year, month);
-    for (let d = 1; d <= totalDays; d++) {
-      const iso = `${year}-${pad(month)}-${pad(d)}`;
-      const dayCell = document.createElement("div");
-      dayCell.className = "cal-day";
+    weeksOfMonth(year, month).forEach(week => {
+      const weekEl = document.createElement("div");
+      weekEl.className = "cal-week";
 
-      const dayNum = document.createElement("div");
-      dayNum.className = "daynum";
-      dayNum.textContent = d;
-      dayCell.appendChild(dayNum);
+      // 같은 주의 7칸이 항상 같은 높이를 갖도록, 이 주에서 실제로 필요한
+      // 레인(줄) 수를 먼저 계산해서 모든 날짜 칸에 동일한 grid-row span을 준다.
+      const segs = weekSegments(week);
+      const laneCount = segs.reduce((max, s) => Math.max(max, s.lane + 1), 0);
+      const rowSpan = laneCount + 1; // +1 = 날짜 숫자 행
 
-      const eventsWrap = document.createElement("div");
-      eventsWrap.className = "cal-day-events";
-      eventsOnDay(iso).forEach(ev => {
-        const chip = document.createElement("button");
-        chip.type = "button";
-        chip.className = `cal-chip tag-${ev.tagClass}`;
-        chip.textContent = ev.zh;
-        chip.setAttribute("aria-label", `${ev.zh}(${ev.ko}), ${ev.start} ~ ${ev.end}`);
-        chip.addEventListener("click", () => showDetail(ev));
-        eventsWrap.appendChild(chip);
+      week.forEach((iso, col) => {
+        const dayCell = document.createElement("div");
+        dayCell.className = "cal-day" + (iso ? "" : " empty");
+        dayCell.style.gridColumn = String(col + 1);
+        dayCell.style.gridRow = `1 / span ${rowSpan}`;
+        if (iso) {
+          const dayNum = document.createElement("div");
+          dayNum.className = "daynum";
+          dayNum.textContent = Number(iso.slice(-2));
+          dayCell.appendChild(dayNum);
+        }
+        weekEl.appendChild(dayCell);
       });
-      dayCell.appendChild(eventsWrap);
 
-      grid.appendChild(dayCell);
-    }
+      segs.forEach(seg => {
+        const bar = document.createElement("button");
+        bar.type = "button";
+        bar.className = `cal-bar tag-${seg.ev.tagClass}`;
+        bar.style.gridColumn = `${seg.startCol + 1} / span ${seg.span}`;
+        bar.style.gridRow = `${seg.lane + 2}`;
+        bar.textContent = seg.ev.zh;
+        bar.setAttribute("aria-label", `${seg.ev.zh}(${seg.ev.ko}), ${seg.ev.start} ~ ${seg.ev.end}`);
+        bar.addEventListener("click", () => showDetail(seg.ev));
+        weekEl.appendChild(bar);
+      });
+
+      grid.appendChild(weekEl);
+    });
 
     monthCard.appendChild(grid);
     cal.appendChild(monthCard);
-  });
-
-  document.getElementById("downloadAll").addEventListener("click", () => {
-    download("2026-2학기-학사일정.ics", buildVCALENDAR(EVENTS.map(buildVEVENT)));
   });
 
   // D-day 알림: 오늘 이후로 가장 가까운 일정을 자동으로 계산해서 보여줌
