@@ -316,3 +316,17 @@ footer{
   .cal-day .daynum{font-size:10px;}
   .cal-chip{font-size:9px; padding:1px 4px;}
 }
+
+@media (max-width:480px){
+  /* 상단 탭 메뉴: 한자+한글 라벨이 줄바꿈되지 않도록 폰트를 줄이고 nowrap 처리 */
+  .tabs{gap:2px;}
+  .tab-link{font-size:11px; padding:6px 8px; gap:3px; white-space:nowrap;}
+  .tab-link .tab-ic{width:12px; height:12px;}
+
+  /* D-day 배지(dd) + 텍스트(tx) + 날짜(dt)가 좁은 화면에서 겹치거나 잘리지 않도록
+     첫 줄은 배지-날짜, 둘째 줄은 전체 너비의 텍스트로 세로 정렬 */
+  .notice{flex-wrap:wrap; align-items:flex-start; row-gap:6px;}
+  .notice .dd{order:1;}
+  .notice .dt{order:2; margin-left:auto;}
+  .notice .tx{order:3; flex:1 1 100%; line-height:1.5;}
+}
