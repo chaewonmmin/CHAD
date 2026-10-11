@@ -1,3 +1,4 @@
+<meta charset="utf-8" />
 <title>学期日历 · 学历翻译计划</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" href="styles.css" />
@@ -7,11 +8,11 @@
 
 <nav class="topnav">
   <div class="topnav-inner">
-    <span class="brand">CAU 学历日历 · 강의평</span>
+    <span class="brand">CAU <span class="brand-zh">学历日历</span><span class="brand-sep"> · </span><span class="brand-ko">강의평</span></span>
     <div class="tabs">
-      <a href="index.html" class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>학사일정 · 日历</span></a>
-      <a href="reviews.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span>강의평 · 点评</span></a>
-      <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span>广场 · 게시판</span></a>
+      <a href="index.html" class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="tab-ko">학사일정</span><span class="tab-sep"> · </span><span class="tab-zh">日历</span></a>
+      <a href="reviews.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span class="tab-ko">강의평</span><span class="tab-sep"> · </span><span class="tab-zh">点评</span></a>
+      <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span class="tab-zh">广场</span><span class="tab-sep"> · </span><span class="tab-ko">게시판</span></a>
     </div>
   </div>
 </nav>
@@ -20,26 +21,26 @@
   <header class="page">
     <div class="eyebrow"><span>2026학년도 2학기</span><span class="dot"></span><span>2026年秋季学期</span></div>
     <h1>学期日历</h1>
-    <p class="sub">整理自学校官方학사일정(学历),按时间顺序列出选课、缴费、考试等重要日期。点击"添加到日历"。</p>
+    <p class="sub">整理自学校官方학사일정(学历),按时间顺序列出选课、缴费、考试等重要日期。点击日期查看详情,可一键添加到 Google 日历。</p>
     <p class="disclaimer">⚠ 以上日期整理自学校官方《2026학년도 신입생 학사가이드》,但学期中若有变更以综合信息系统(포털)最新公告为准,请定期核对。</p>
   </header>
 
   <div class="notice" id="noticeBanner" hidden></div>
 
   <div class="cal-nav">
-    <button type="button" class="btn" id="prevMonthBtn">上个月 · 이전 달</button>
+    <button type="button" class="btn" id="prevMonthBtn"><span class="cal-nav-zh">上个月</span><span class="cal-nav-sep"> · </span><span class="cal-nav-ko">이전 달</span></button>
     <div class="cal-nav-select">
       <select id="yearSelect"></select>
       <select id="monthSelect"></select>
     </div>
-    <button type="button" class="btn" id="nextMonthBtn">下个月 · 다음 달</button>
+    <button type="button" class="btn" id="nextMonthBtn"><span class="cal-nav-zh">下个月</span><span class="cal-nav-sep"> · </span><span class="cal-nav-ko">다음 달</span></button>
   </div>
 
   <div id="calendar"></div>
   <div class="cal-detail empty" id="calendarDetail">点击日期查看当天安排 · 날짜를 클릭하면 그날 일정이 표시됩니다.</div>
 
   <footer>
-    本页面为独立静态页面,数据全部保存在浏览器本地生成,不会上传或收集任何个人信息。可通过下方按钮一键添加到 Google 日历。
+    本页面为独立静态页面,数据全部保存在浏览器本地生成,不会上传或收集任何个人信息。在日程详情中可一键添加到 Google 日历。
   </footer>
 </div>
 
@@ -244,7 +245,10 @@
         bar.className = `cal-bar tag-${seg.ev.tagClass}`;
         bar.style.gridColumn = `${seg.startCol + 1} / span ${seg.span}`;
         bar.style.gridRow = `${seg.lane + 2}`;
-        bar.textContent = seg.ev.zh;
+        const barLabel = document.createElement("span");
+        barLabel.className = "cal-bar-label";
+        barLabel.textContent = seg.ev.zh;
+        bar.appendChild(barLabel);
         bar.setAttribute("aria-label", `${seg.ev.zh}(${seg.ev.ko}), ${seg.ev.start} ~ ${seg.ev.end}`);
         bar.addEventListener("click", () => showDetail(seg.ev));
         weekEl.appendChild(bar);
@@ -262,6 +266,7 @@
     const { year, month } = MONTH_RANGE[currentIndex];
     renderMonth(year, month);
     showDayDetail(iso);
+    calendarDetail.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
   // 날짜 칸 클릭 시, 그 날짜에 걸쳐있는 모든 일정(start ~ end)을 목록으로 표시
