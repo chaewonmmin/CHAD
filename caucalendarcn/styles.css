@@ -170,6 +170,20 @@ button:focus-visible, .btn:focus-visible, a:focus-visible{
 .notice .tx b{font-weight:700;}
 .notice .dt{font-size:11.5px; color:var(--ink-faint); font-variant-numeric:tabular-nums; white-space:nowrap;}
 
+.cal-nav{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  margin:20px 0 14px; flex-wrap:wrap;
+}
+.cal-nav-select{display:flex; gap:6px;}
+.cal-nav-select select{
+  font:inherit; font-size:14px; color:var(--ink);
+  border:1px solid var(--line); background:var(--paper-raised);
+  border-radius:var(--radius-sm); padding:9px 10px; cursor:pointer;
+}
+.cal-nav-select select:focus-visible{
+  outline:2px solid var(--focus); outline-offset:1px;
+}
+
 .month-label{
   font-size:14px; font-weight:700; color:var(--ink);
   margin:0 0 12px;
@@ -217,10 +231,18 @@ button:focus-visible, .btn:focus-visible, a:focus-visible{
   border-bottom:1px solid var(--line);
   min-width:0;
 }
-.cal-day.empty{background:transparent;}
+.cal-day.empty{background:transparent; cursor:default;}
+.cal-day:not(.empty){cursor:pointer;}
+.cal-day.selected{background:var(--accent-soft);}
 .cal-day .daynum{
   font-size:11.5px; color:var(--ink-soft); font-variant-numeric:tabular-nums;
   line-height:1.2;
+}
+.cal-day.today .daynum{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width:16px; height:16px; padding:0 3px;
+  background:var(--accent); color:#fff; font-weight:700;
+  border-radius:var(--radius-pill);
 }
 /* 모든 이벤트 막대를 고정 height/padding/font-size로 통일한 칩(chip).
    grid row는 내용에 맞춰 늘어날 수 있지만(align-self:start로 stretch를 끔),
@@ -245,6 +267,13 @@ button:focus-visible, .btn:focus-visible, a:focus-visible{
 .cal-detail.empty{
   color:var(--ink-faint); font-size:13.5px; text-align:center; padding:24px 20px;
   box-shadow:none; background:transparent;
+}
+
+.day-detail-list{display:flex; flex-direction:column; gap:14px;}
+.day-detail-item{padding-top:14px; border-top:1px solid var(--line);}
+.day-detail-item:first-child{padding-top:0; border-top:none;}
+.day-detail-period{
+  font-size:13px; color:var(--ink-soft); margin-top:4px; font-variant-numeric:tabular-nums;
 }
 
 .event-main{min-width:0;}

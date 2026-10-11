@@ -20,21 +20,26 @@
   <header class="page">
     <div class="eyebrow"><span>2026학년도 2학기</span><span class="dot"></span><span>2026年秋季学期</span></div>
     <h1>学期日历</h1>
-    <p class="sub">整理自学校官方학사일정(学历),按时间顺序列出选课、缴费、考试等重要日期。点击"添加到日历",到期前会自动提醒。</p>
+    <p class="sub">整理自学校官方학사일정(学历),按时间顺序列出选课、缴费、考试等重要日期。点击"添加到日历"。</p>
     <p class="disclaimer">⚠ 以上日期整理自学校官方《2026학년도 신입생 학사가이드》,但学期中若有变更以综合信息系统(포털)最新公告为准,请定期核对。</p>
   </header>
 
-  <div class="toolbar">
-    <span class="btn" style="border-style:dashed; color:var(--ink-soft); cursor:default;">提醒会在到期前 3 天自动提示</span>
-  </div>
-
   <div class="notice" id="noticeBanner" hidden></div>
 
+  <div class="cal-nav">
+    <button type="button" class="btn" id="prevMonthBtn">上个月 · 이전 달</button>
+    <div class="cal-nav-select">
+      <select id="yearSelect"></select>
+      <select id="monthSelect"></select>
+    </div>
+    <button type="button" class="btn" id="nextMonthBtn">下个月 · 다음 달</button>
+  </div>
+
   <div id="calendar"></div>
-  <div class="cal-detail empty" id="calendarDetail">点击日历上有颜色标记的日期查看详细安排 · 색이 있는 날짜를 클릭하면 상세 일정이 표시됩니다.</div>
+  <div class="cal-detail empty" id="calendarDetail">点击日期查看当天安排 · 날짜를 클릭하면 그날 일정이 표시됩니다.</div>
 
   <footer>
-    本页面为独立静态页面,数据全部保存在浏览器本地生成,不会上传或收集任何个人信息。日历文件(.ics)可导入 Apple 日历、Outlook,或通过下方按钮一键添加到 Google 日历。
+    本页面为独立静态页面,数据全部保存在浏览器本地生成,不会上传或收集任何个人信息。可通过下方按钮一键添加到 Google 日历。
   </footer>
 </div>
 
@@ -70,51 +75,16 @@
     d.setDate(d.getDate() + days);
     return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   }
-  function escapeICS(text){
-    return String(text).replace(/\\/g,"\\\\").replace(/,/g,"\\,").replace(/;/g,"\\;").replace(/\n/g,"\\n");
-  }
-  function nowStamp(){
+  function todayISO(){
     const d = new Date();
-    return `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   }
-  function buildVEVENT(ev){
-    const dtstart = toICSDate(ev.start);
-    const dtend = toICSDate(addDaysISO(ev.end, 1));
-    const summary = escapeICS(`${ev.zh}(${ev.ko})`);
-    const desc = escapeICS(ev.note);
-    return [
-      "BEGIN:VEVENT",
-      `UID:${ev.id}-2026s2@academic-calendar.local`,
-      `DTSTAMP:${nowStamp()}`,
-      `DTSTART;VALUE=DATE:${dtstart}`,
-      `DTEND;VALUE=DATE:${dtend}`,
-      `SUMMARY:${summary}`,
-      `DESCRIPTION:${desc}`,
-      "BEGIN:VALARM",
-      "ACTION:DISPLAY",
-      `DESCRIPTION:${summary}`,
-      "TRIGGER:-P3D",
-      "END:VALARM",
-      "END:VEVENT",
-    ].join("\r\n");
+  function shortDate(iso){
+    const [, m, d] = iso.split("-").map(Number);
+    return `${m}/${d}`;
   }
-  function buildVCALENDAR(vevents){
-    return [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//academic-calendar//KR-ZH//EN",
-      "CALSCALE:GREGORIAN",
-      ...vevents,
-      "END:VCALENDAR",
-    ].join("\r\n");
-  }
-  function download(filename, content){
-    const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  function formatRange(ev){
+    return ev.start === ev.end ? shortDate(ev.start) : `${shortDate(ev.start)}–${shortDate(ev.end)}`;
   }
   function googleCalendarUrl(ev){
     const dates = `${toICSDate(ev.start)}/${toICSDate(addDaysISO(ev.end,1))}`;
@@ -166,13 +136,6 @@
     gbtn.textContent = "+ Google 日历";
     actions.appendChild(gbtn);
 
-    const ibtn = document.createElement("button");
-    ibtn.textContent = "⬇ .ics (Apple / Outlook)";
-    ibtn.addEventListener("click", () => {
-      download(`${ev.id}.ics`, buildVCALENDAR([buildVEVENT(ev)]));
-    });
-    actions.appendChild(ibtn);
-
     calendarDetail.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
@@ -220,7 +183,12 @@
     return segs;
   }
 
-  monthRangeFromEvents(EVENTS).forEach(({ year, month }) => {
+  const MONTH_RANGE = monthRangeFromEvents(EVENTS);
+  let currentIndex = 0;
+  let selectedDateIso = null;
+
+  function renderMonth(year, month) {
+    cal.innerHTML = "";
     const monthCard = document.createElement("div");
     monthCard.className = "cal-card";
 
@@ -241,6 +209,7 @@
 
     const grid = document.createElement("div");
     grid.className = "cal-grid";
+    const todayIso = todayISO();
 
     weeksOfMonth(year, month).forEach(week => {
       const weekEl = document.createElement("div");
@@ -255,6 +224,8 @@
       week.forEach((iso, col) => {
         const dayCell = document.createElement("div");
         dayCell.className = "cal-day" + (iso ? "" : " empty");
+        if (iso === todayIso) dayCell.classList.add("today");
+        if (iso === selectedDateIso) dayCell.classList.add("selected");
         dayCell.style.gridColumn = String(col + 1);
         dayCell.style.gridRow = `1 / span ${rowSpan}`;
         if (iso) {
@@ -262,6 +233,7 @@
           dayNum.className = "daynum";
           dayNum.textContent = Number(iso.slice(-2));
           dayCell.appendChild(dayNum);
+          dayCell.addEventListener("click", () => selectDate(iso));
         }
         weekEl.appendChild(dayCell);
       });
@@ -283,13 +255,120 @@
 
     monthCard.appendChild(grid);
     cal.appendChild(monthCard);
+  }
+
+  function selectDate(iso){
+    selectedDateIso = iso;
+    const { year, month } = MONTH_RANGE[currentIndex];
+    renderMonth(year, month);
+    showDayDetail(iso);
+  }
+
+  // 날짜 칸 클릭 시, 그 날짜에 걸쳐있는 모든 일정(start ~ end)을 목록으로 표시
+  function showDayDetail(iso){
+    const dayEvents = EVENTS
+      .filter(ev => ev.start <= iso && iso <= ev.end)
+      .sort((a, b) => a.start.localeCompare(b.start));
+
+    if (!dayEvents.length) {
+      calendarDetail.classList.add("empty");
+      calendarDetail.innerHTML = "这一天没有安排 · 이 날은 일정이 없습니다.";
+      return;
+    }
+
+    calendarDetail.classList.remove("empty");
+    calendarDetail.innerHTML = "";
+    const list = document.createElement("div");
+    list.className = "day-detail-list";
+    dayEvents.forEach(ev => {
+      const item = document.createElement("div");
+      item.className = "day-detail-item";
+      item.innerHTML = `
+        <div class="row-top">
+          <span class="zh">${ev.zh}</span>
+          <span class="ko">${ev.ko}</span>
+          <span class="tag tag-${ev.tagClass}">${ev.tag}</span>
+        </div>
+        <div class="day-detail-period">${formatRange(ev)}</div>
+        <div class="note">${ev.note}</div>
+      `;
+      list.appendChild(item);
+    });
+    calendarDetail.appendChild(list);
+  }
+
+  // 월 이동(이전/다음 달 버튼, 연·월 select)
+  const yearSelect = document.getElementById("yearSelect");
+  const monthSelect = document.getElementById("monthSelect");
+  const prevMonthBtn = document.getElementById("prevMonthBtn");
+  const nextMonthBtn = document.getElementById("nextMonthBtn");
+
+  function populateYearSelect(){
+    const years = [...new Set(MONTH_RANGE.map(m => m.year))];
+    yearSelect.innerHTML = years.map(y => `<option value="${y}">${y}年 · ${y}년</option>`).join("");
+  }
+  function populateMonthSelect(year){
+    const months = MONTH_RANGE.filter(m => m.year === year).map(m => m.month);
+    monthSelect.innerHTML = months.map(m => `<option value="${m}">${m}月 · ${m}월</option>`).join("");
+  }
+  function updateNavUI(){
+    const { year, month } = MONTH_RANGE[currentIndex];
+    yearSelect.value = String(year);
+    populateMonthSelect(year);
+    monthSelect.value = String(month);
+    prevMonthBtn.disabled = currentIndex === 0;
+    nextMonthBtn.disabled = currentIndex === MONTH_RANGE.length - 1;
+  }
+  function goToIndex(idx, keepIso){
+    currentIndex = Math.max(0, Math.min(MONTH_RANGE.length - 1, idx));
+    const { year, month } = MONTH_RANGE[currentIndex];
+    selectedDateIso = keepIso || `${year}-${pad(month)}-01`;
+    updateNavUI();
+    renderMonth(year, month);
+    showDayDetail(selectedDateIso);
+  }
+
+  prevMonthBtn.addEventListener("click", () => goToIndex(currentIndex - 1));
+  nextMonthBtn.addEventListener("click", () => goToIndex(currentIndex + 1));
+  yearSelect.addEventListener("change", () => {
+    const year = Number(yearSelect.value);
+    populateMonthSelect(year);
+    const month = Number(monthSelect.value);
+    const idx = MONTH_RANGE.findIndex(m => m.year === year && m.month === month);
+    goToIndex(idx === -1 ? MONTH_RANGE.findIndex(m => m.year === year) : idx);
   });
+  monthSelect.addEventListener("change", () => {
+    const year = Number(yearSelect.value);
+    const month = Number(monthSelect.value);
+    goToIndex(MONTH_RANGE.findIndex(m => m.year === year && m.month === month));
+  });
+
+  populateYearSelect();
+
+  // 초기 진입: 오늘이 일정 범위 안이면 그 달 + 오늘을 선택, 범위 밖이면 가장 가까운 달의 1일을 선택
+  const todayIsoInit = todayISO();
+  const todayMonthIdx = MONTH_RANGE.findIndex(({ year, month }) => {
+    const start = `${year}-${pad(month)}-01`;
+    const end = `${year}-${pad(month)}-${pad(daysInMonth(year, month))}`;
+    return todayIsoInit >= start && todayIsoInit <= end;
+  });
+  if (todayMonthIdx !== -1) {
+    goToIndex(todayMonthIdx, todayIsoInit);
+  } else {
+    const todayKey = new Date().getFullYear() * 12 + new Date().getMonth() + 1;
+    let nearest = 0, nearestDiff = Infinity;
+    MONTH_RANGE.forEach((m, i) => {
+      const diff = Math.abs((m.year * 12 + m.month) - todayKey);
+      if (diff < nearestDiff) { nearestDiff = diff; nearest = i; }
+    });
+    goToIndex(nearest);
+  }
 
   // D-day 알림: 오늘 이후로 가장 가까운 일정을 자동으로 계산해서 보여줌
   function renderNotice(){
     const banner = document.getElementById("noticeBanner");
     if (!banner) return;
-    const todayIso = new Date().toISOString().slice(0, 10);
+    const todayIso = todayISO();
     const upcoming = EVENTS
       .filter(ev => ev.start >= todayIso)
       .sort((a, b) => a.start.localeCompare(b.start))[0];
