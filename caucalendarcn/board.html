@@ -26,14 +26,7 @@
   font-size:13px; padding:12px 10px; border-bottom:2px solid transparent;
   white-space:nowrap;
 }
-.nav-auth{display:flex; align-items:center; gap:8px; white-space:nowrap;}
-.nav-auth .who{font-size:12px; color:var(--ink-faint); max-width:9em;
-  overflow:hidden; text-overflow:ellipsis;}
-.nav-auth button{
-  background:transparent; border:1px solid var(--line); color:var(--ink-soft);
-  font-size:12px; padding:4px 10px; border-radius:var(--radius);
-}
-.nav-auth button:hover{background:var(--paper-raised); border-color:var(--ink-faint); color:var(--ink);}
+/* .nav-auth 는 styles.css 로 이동(reviews.html 과 공유) */
 
 /* ---- 목록 머리 ---- */
 .list-head{
@@ -155,34 +148,9 @@
 .err[hidden]{display:none;}
 .msg{font-size:12.5px; color:var(--ink-soft);}
 
-/* ---- 로그인 ---- */
-.backdrop{
-  position:fixed; inset:0; background:rgba(16,24,40,.5);
-  display:flex; align-items:center; justify-content:center; padding:16px; z-index:50;
-}
-.backdrop[hidden]{display:none;}
-.sheet{
-  background:var(--paper-raised); border:0; box-shadow:var(--shadow-md); border-radius:var(--radius);
-  padding:22px; width:100%; max-width:340px;
-}
-.sheet h2{font-size:15px; margin:0 0 16px;}
-.sheet label{display:block; font-size:12px; color:var(--ink-soft); margin-bottom:4px;}
-.sheet input{
-  width:100%; font:inherit; font-size:14px; padding:9px 11px; border-radius:var(--radius-sm);
-  border:1px solid var(--line); background:var(--paper); color:var(--ink); margin-bottom:10px;
-}
-.sheet input:focus{outline:2px solid var(--focus); outline-offset:1px;}
-.sheet .row{display:flex; gap:6px; margin-top:4px;}
-.sheet .row button{flex:1; justify-content:center; padding:9px; border-radius:var(--radius-pill); font-size:13px;}
-.switch{margin:14px 0 0; font-size:12px; color:var(--ink-faint); text-align:center;}
-.switch button{
-  background:none; border:0; border-radius:0; padding:0;
-  font-size:12px; color:var(--accent); text-decoration:underline;
-}
-.switch button:hover{background:none; border-color:transparent;}
+/* .backdrop/.sheet/.switch/.ko-sub 는 styles.css 로 이동(reviews.html 과 공유) */
 
 /* ---- 기타 ---- */
-.ko-sub{font-size:11.5px; color:var(--ink-faint); font-weight:400;}
 footer{
   margin-top:32px; padding-top:14px; border-top:1px solid var(--line);
   font-size:11.5px; color:var(--ink-faint); line-height:1.7;
@@ -275,43 +243,42 @@ footer{
         <label for="authNick">昵称 <span class="ko-sub">닉네임 2~12자</span></label>
         <input type="text" id="authNick" maxlength="12" autocomplete="nickname" />
       </div>
-      <label for="authEmail">邮箱 <span class="ko-sub">이메일</span></label>
-      <input type="email" id="authEmail" autocomplete="email" required />
-      <label for="authPw">密码 <span class="ko-sub">비밀번호 6자 이상</span></label>
-      <input type="password" id="authPw" autocomplete="current-password" minlength="6" required />
+      <div id="emailRow">
+        <label for="authEmail">邮箱 <span class="ko-sub">학교 이메일 @cau.ac.kr</span></label>
+        <input type="email" id="authEmail" autocomplete="email" required />
+      </div>
+      <div id="pwRow">
+        <label for="authPw">密码 <span class="ko-sub">비밀번호 6자 이상</span></label>
+        <input type="password" id="authPw" autocomplete="current-password" minlength="6" required />
+      </div>
+      <div id="verifyRow" hidden>
+        <label for="authCode">验证码 <span class="ko-sub">이메일로 받은 인증번호</span></label>
+        <input type="text" id="authCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" />
+      </div>
       <div class="row">
         <button type="submit" class="btn-primary" id="authSubmit">登录</button>
         <button type="button" id="authClose">关闭</button>
       </div>
       <p class="msg" id="authStatus" style="margin:10px 0 0;"></p>
+      <p class="switch" id="resendRow" hidden><button type="button" id="resendBtn">重新发送验证码 · 인증번호 다시 받기</button></p>
     </form>
-    <p class="switch"><span id="switchText">还没有账号？</span>
+    <p class="switch" id="switchRow"><span id="switchText">还没有账号？</span>
       <button type="button" id="switchBtn">注册</button></p>
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
 <script>
 (function () {
   "use strict";
 
-  // service_role 키는 절대 여기에 넣지 않는다.
-  const SUPABASE_URL      = "https://ltmvvsmraejnuboyjarx.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_IQou3ShN90xCLGfXQ8_vZQ_mXRC6be9";
   const PAGE_SIZE = 20;
-
   const $ = (id) => document.getElementById(id);
-  const banner = $("configBanner");
 
-  let sb = null;
-  try {
-    if (!window.supabase || typeof window.supabase.createClient !== "function") throw 0;
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  } catch (e) {
-    banner.hidden = false;
-    banner.textContent = "无法加载数据库组件，请检查网络后刷新。 / 라이브러리를 불러오지 못했습니다.";
-    return;
-  }
+  if (!window.CAUAuth) return;
+  const sb = CAUAuth.getClient();
+  if (!sb) return;
 
   let session = null, myLikes = new Set, offset = 0, loading = false, currentPost = null;
 
@@ -341,70 +308,7 @@ footer{
   const who = (r) => r.is_anonymous ? (r.is_mine ? "匿名（我）" : "匿名") : (r.nickname || "匿名");
   const say = (el, m, bad) => { el.textContent = m || ""; el.style.color = bad ? "var(--gold)" : "var(--ink-soft)"; };
 
-  // ---------- 인증 ----------
-  const authModal = $("authModal");
-  let mode = "login";
-
-  function renderAuth() {
-    if (session) {
-      const n = session.user.user_metadata && session.user.user_metadata.nickname;
-      $("who").textContent = n || session.user.email;
-      $("loginBtn").hidden = true; $("logoutBtn").hidden = false;
-    } else {
-      $("who").textContent = "";
-      $("loginBtn").hidden = false; $("logoutBtn").hidden = true;
-    }
-  }
-
-  function openAuth(m) {
-    mode = m || "login";
-    const up = mode === "signup";
-    $("authTitle").textContent = up ? "注册 · 회원가입" : "登录 · 로그인";
-    $("authSubmit").textContent = up ? "注册" : "登录";
-    $("nickRow").hidden = !up;
-    $("switchText").textContent = up ? "已有账号？" : "还没有账号？";
-    $("switchBtn").textContent = up ? "登录" : "注册";
-    say($("authStatus"), "");
-    authModal.hidden = false;
-    (up ? $("authNick") : $("authEmail")).focus();
-  }
-  const closeAuth = () => { authModal.hidden = true; $("authForm").reset(); };
-
-  $("loginBtn").addEventListener("click", () => openAuth("login"));
-  $("authClose").addEventListener("click", closeAuth);
-  $("switchBtn").addEventListener("click", () => openAuth(mode === "signup" ? "login" : "signup"));
-  authModal.addEventListener("click", (e) => { if (e.target === authModal) closeAuth(); });
-  $("logoutBtn").addEventListener("click", () => sb.auth.signOut());
-
-  $("authForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const st = $("authStatus");
-    const email = $("authEmail").value.trim(), pw = $("authPw").value, nick = $("authNick").value.trim();
-    if (!email || !pw) return say(st, "请填写邮箱和密码。", true);
-    if (mode === "signup") {
-      if (nick.length < 2 || nick.length > 12) return say(st, "昵称 2~12 个字符。 / 닉네임은 2~12자.", true);
-      if (pw.length < 6) return say(st, "密码至少 6 位。", true);
-    }
-    $("authSubmit").disabled = true; say(st, "处理中…");
-    try {
-      if (mode === "signup") {
-        const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { nickname: nick } } });
-        if (error) throw error;
-        if (!data.session) { say(st, "已发送验证邮件，请查收。 / 인증 메일을 확인해주세요."); $("authSubmit").disabled = false; return; }
-      } else {
-        const { error } = await sb.auth.signInWithPassword({ email, password: pw });
-        if (error) throw error;
-      }
-      closeAuth();
-    } catch (err) {
-      const m = String(err && err.message || err);
-      say(st, /Invalid login/i.test(m) ? "邮箱或密码不正确。 / 이메일 또는 비밀번호가 올바르지 않습니다."
-        : /already registered/i.test(m) ? "该邮箱已注册，请直接登录。"
-        : /rate limit/i.test(m) ? "请求过于频繁，请稍后再试。" : m, true);
-    } finally { $("authSubmit").disabled = false; }
-  });
-
-  const needLogin = () => session ? true : (openAuth("login"), false);
+  const needLogin = CAUAuth.needLogin;
 
   // ---------- 목록 ----------
   const postList = $("postList");
@@ -645,12 +549,12 @@ footer{
   $("backBtn").addEventListener("click", () => { location.hash = ""; });
 
   // ---------- 시작 ----------
-  sb.auth.getSession().then(({ data }) => {
-    session = data.session; renderAuth();
+  CAUAuth.ready().then((s) => {
+    session = s;
     loadPosts(true).then(route);
   });
-  sb.auth.onAuthStateChange((_e, s) => {
-    session = s; myLikes = new Set; renderAuth();
+  CAUAuth.onChange((s) => {
+    session = s; myLikes = new Set;
     if (currentPost) openPost(currentPost.id); else loadPosts(true);
   });
 })();

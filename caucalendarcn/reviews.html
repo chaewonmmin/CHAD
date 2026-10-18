@@ -14,6 +14,11 @@
       <a href="reviews.html" class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span class="tab-ko">강의평</span><span class="tab-sep"> · </span><span class="tab-zh">点评</span></a>
       <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span class="tab-zh">广场</span><span class="tab-sep"> · </span><span class="tab-ko">게시판</span></a>
     </div>
+    <div class="nav-auth">
+      <span class="who" id="who"></span>
+      <button id="loginBtn" hidden>登录</button>
+      <button id="logoutBtn" hidden>退出</button>
+    </div>
   </div>
 </nav>
 
@@ -72,15 +77,41 @@
   </footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script>
-  // TODO(관리자): Supabase 프로젝트 생성 후 아래 두 값을 채워주세요.
-  // anon/public key는 클라이언트에 노출되어도 안전하도록 설계된 키입니다(RLS 정책이 실제 접근 권한을 통제).
-  // service_role 키는 절대 여기에 넣지 마세요.
-  const SUPABASE_URL = "https://ltmvvsmraejnuboyjarx.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_IQou3ShN90xCLGfXQ8_vZQ_mXRC6be9";
+<div class="backdrop" id="authModal" hidden>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+    <h2 id="authTitle">登录</h2>
+    <form id="authForm" novalidate>
+      <div id="nickRow" hidden>
+        <label for="authNick">昵称 <span class="ko-sub">닉네임 2~12자</span></label>
+        <input type="text" id="authNick" maxlength="12" autocomplete="nickname" />
+      </div>
+      <div id="emailRow">
+        <label for="authEmail">邮箱 <span class="ko-sub">학교 이메일 @cau.ac.kr</span></label>
+        <input type="email" id="authEmail" autocomplete="email" required />
+      </div>
+      <div id="pwRow">
+        <label for="authPw">密码 <span class="ko-sub">비밀번호 6자 이상</span></label>
+        <input type="password" id="authPw" autocomplete="current-password" minlength="6" required />
+      </div>
+      <div id="verifyRow" hidden>
+        <label for="authCode">验证码 <span class="ko-sub">이메일로 받은 인증번호</span></label>
+        <input type="text" id="authCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" />
+      </div>
+      <div class="row">
+        <button type="submit" class="btn-primary" id="authSubmit">登录</button>
+        <button type="button" id="authClose">关闭</button>
+      </div>
+      <p class="msg" id="authStatus" style="margin:10px 0 0;"></p>
+      <p class="switch" id="resendRow" hidden><button type="button" id="resendBtn">重新发送验证码 · 인증번호 다시 받기</button></p>
+    </form>
+    <p class="switch" id="switchRow"><span id="switchText">还没有账号？</span>
+      <button type="button" id="switchBtn">注册</button></p>
+  </div>
+</div>
 
-  const configBanner = document.getElementById("configBanner");
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="auth.js"></script>
+<script>
   const toggleFormBtn = document.getElementById("toggleForm");
   const reviewForm = document.getElementById("reviewForm");
   const addForm = document.getElementById("addForm");
@@ -89,40 +120,58 @@
   const formStatus = document.getElementById("formStatus");
   const reviewList = document.getElementById("reviewList");
 
-  const supabaseConfigured = Boolean(SUPABASE_URL) && Boolean(SUPABASE_ANON_KEY);
-  let supabaseClient = null;
-  let supabaseLoadError = false;
-  if (supabaseConfigured) {
-    if (window.supabase && typeof window.supabase.createClient === "function") {
-      try {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      } catch (e) {
-        console.error(e);
-        supabaseLoadError = true;
+  // Supabase 클라이언트/로그인 모달은 auth.js(공용, board.html과 공유)가 담당.
+  const supabaseClient = window.CAUAuth ? CAUAuth.getClient() : null;
+
+  if (!supabaseClient) {
+    toggleFormBtn.disabled = true;
+  } else {
+    toggleFormBtn.addEventListener("click", () => {
+      if (!CAUAuth.needLogin()) return;
+      reviewForm.hidden = !reviewForm.hidden;
+      if (!reviewForm.hidden) document.getElementById("courseName").focus();
+    });
+    cancelFormBtn.addEventListener("click", () => {
+      addForm.reset();
+      clearErrors();
+      reviewForm.hidden = true;
+    });
+
+    addForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!CAUAuth.needLogin()) return;
+      clearErrors();
+
+      const values = {
+        course_name: document.getElementById("courseName").value.trim(),
+        professor: document.getElementById("professor").value.trim(),
+        credit: parseInt(document.getElementById("credit").value, 10),
+        review_text: document.getElementById("reviewText").value.trim(),
+        author_id: CAUAuth.getSession().user.id,
+      };
+      if (!validate(values)) return;
+
+      submitBtn.disabled = true;
+      formStatus.textContent = "제출 중… / 提交中…";
+
+      const { data, error } = await supabaseClient.from("reviews").insert(values).select();
+
+      submitBtn.disabled = false;
+      if (error) {
+        console.error(error);
+        formStatus.textContent = "제출에 실패했습니다. 다시 시도해주세요. / 提交失败,请重试。";
+        return;
       }
-    } else {
-      supabaseLoadError = true;
-    }
-  }
 
-  if (!supabaseConfigured) {
-    configBanner.hidden = false;
-    toggleFormBtn.disabled = true;
-  } else if (supabaseLoadError) {
-    configBanner.hidden = false;
-    configBanner.textContent = "⚠ 라이브러리를 불러오지 못했습니다. 인터넷 연결을 확인하고 새로고침 해주세요. / 加载失败,请检查网络后刷新页面。";
-    toggleFormBtn.disabled = true;
-  }
+      formStatus.textContent = "";
+      reviews.unshift(data[0]);
+      renderReviews(reviews);
+      addForm.reset();
+      reviewForm.hidden = true;
+    });
 
-  toggleFormBtn.addEventListener("click", () => {
-    reviewForm.hidden = !reviewForm.hidden;
-    if (!reviewForm.hidden) document.getElementById("courseName").focus();
-  });
-  cancelFormBtn.addEventListener("click", () => {
-    addForm.reset();
-    clearErrors();
-    reviewForm.hidden = true;
-  });
+    loadReviews();
+  }
 
   function clearErrors(){
     ["courseName","professor","credit","reviewText"].forEach(id => {
@@ -185,7 +234,7 @@
   let reviews = [];
 
   async function loadReviews(){
-    if (!supabaseConfigured) {
+    if (!supabaseClient) {
       reviewList.innerHTML = `<p class="review-state">데이터베이스가 연결되면 강의평이 이곳에 표시됩니다.</p>`;
       return;
     }
@@ -201,37 +250,4 @@
     reviews = data;
     renderReviews(reviews);
   }
-
-  addForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    clearErrors();
-
-    const values = {
-      course_name: document.getElementById("courseName").value.trim(),
-      professor: document.getElementById("professor").value.trim(),
-      credit: parseInt(document.getElementById("credit").value, 10),
-      review_text: document.getElementById("reviewText").value.trim(),
-    };
-    if (!validate(values)) return;
-
-    submitBtn.disabled = true;
-    formStatus.textContent = "제출 중… / 提交中…";
-
-    const { data, error } = await supabaseClient.from("reviews").insert(values).select();
-
-    submitBtn.disabled = false;
-    if (error) {
-      console.error(error);
-      formStatus.textContent = "제출에 실패했습니다. 다시 시도해주세요. / 提交失败,请重试。";
-      return;
-    }
-
-    formStatus.textContent = "";
-    reviews.unshift(data[0]);
-    renderReviews(reviews);
-    addForm.reset();
-    reviewForm.hidden = true;
-  });
-
-  loadReviews();
 </script>
