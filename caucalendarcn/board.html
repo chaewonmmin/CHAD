@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="utf-8" />
-<title>广场 · CAU 中国留学生</title>
+<title data-i18n="title_board">广场 · CAU 中国留学生</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="中央大学中国留学生自由交流版块。选课、租房、打工、生活。" />
 <link rel="stylesheet" href="styles.css" />
@@ -16,7 +16,7 @@
 .wrap{max-width:680px; padding:0 16px 64px;}
 
 /* ---- 상단바: 로고 + 탭 + 계정 ---- */
-.topnav-inner{padding:0 16px; gap:0; flex-wrap:nowrap;}
+.topnav-inner{padding:0 16px; gap:6px 0; flex-wrap:wrap;}
 .brand{
   font-size:13px; font-weight:700; color:var(--ink); text-decoration:none;
   white-space:nowrap; padding:12px 0;
@@ -26,14 +26,7 @@
   font-size:13px; padding:12px 10px; border-bottom:2px solid transparent;
   white-space:nowrap;
 }
-.nav-auth{display:flex; align-items:center; gap:8px; white-space:nowrap;}
-.nav-auth .who{font-size:12px; color:var(--ink-faint); max-width:9em;
-  overflow:hidden; text-overflow:ellipsis;}
-.nav-auth button{
-  background:transparent; border:1px solid var(--line); color:var(--ink-soft);
-  font-size:12px; padding:4px 10px; border-radius:var(--radius);
-}
-.nav-auth button:hover{background:var(--paper-raised); border-color:var(--ink-faint); color:var(--ink);}
+/* .nav-auth 는 styles.css 로 이동(reviews.html 과 공유) */
 
 /* ---- 목록 머리 ---- */
 .list-head{
@@ -155,34 +148,9 @@
 .err[hidden]{display:none;}
 .msg{font-size:12.5px; color:var(--ink-soft);}
 
-/* ---- 로그인 ---- */
-.backdrop{
-  position:fixed; inset:0; background:rgba(16,24,40,.5);
-  display:flex; align-items:center; justify-content:center; padding:16px; z-index:50;
-}
-.backdrop[hidden]{display:none;}
-.sheet{
-  background:var(--paper-raised); border:0; box-shadow:var(--shadow-md); border-radius:var(--radius);
-  padding:22px; width:100%; max-width:340px;
-}
-.sheet h2{font-size:15px; margin:0 0 16px;}
-.sheet label{display:block; font-size:12px; color:var(--ink-soft); margin-bottom:4px;}
-.sheet input{
-  width:100%; font:inherit; font-size:14px; padding:9px 11px; border-radius:var(--radius-sm);
-  border:1px solid var(--line); background:var(--paper); color:var(--ink); margin-bottom:10px;
-}
-.sheet input:focus{outline:2px solid var(--focus); outline-offset:1px;}
-.sheet .row{display:flex; gap:6px; margin-top:4px;}
-.sheet .row button{flex:1; justify-content:center; padding:9px; border-radius:var(--radius-pill); font-size:13px;}
-.switch{margin:14px 0 0; font-size:12px; color:var(--ink-faint); text-align:center;}
-.switch button{
-  background:none; border:0; border-radius:0; padding:0;
-  font-size:12px; color:var(--accent); text-decoration:underline;
-}
-.switch button:hover{background:none; border-color:transparent;}
+/* .backdrop/.sheet/.switch/.ko-sub 는 styles.css 로 이동(reviews.html 과 공유) */
 
 /* ---- 기타 ---- */
-.ko-sub{font-size:11.5px; color:var(--ink-faint); font-weight:400;}
 footer{
   margin-top:32px; padding-top:14px; border-top:1px solid var(--line);
   font-size:11.5px; color:var(--ink-faint); line-height:1.7;
@@ -196,21 +164,24 @@ footer{
   .nav-auth .who{display:none;}
 }
 </style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <nav class="topnav">
   <div class="topnav-inner">
-    <a class="brand" href="index.html">CAU 中国留学生</a>
+    <a class="brand" href="index.html"><span class="brand-cau">CAU</span> <span class="brand-name" data-i18n="brand_name">中国留学生</span></a>
     <div class="tabs">
-      <a href="index.html"   class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>日历</span></a>
-      <a href="reviews.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span>点评</span></a>
-      <a href="board.html"   class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span>广场</span></a>
+      <a href="index.html"   class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span data-i18n="tab_cal">日历</span></a>
+      <a href="reviews.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span data-i18n="tab_rev">点评</span></a>
+      <a href="board.html"   class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span data-i18n="tab_board">广场</span></a>
     </div>
     <div class="nav-auth">
       <span class="who" id="who"></span>
-      <button id="loginBtn" hidden>登录</button>
-      <button id="logoutBtn" hidden>退出</button>
+      <button id="loginBtn" data-i18n="login" hidden>登录</button>
+      <button id="logoutBtn" data-i18n="logout" hidden>退出</button>
     </div>
   </div>
 </nav>
@@ -222,93 +193,57 @@ footer{
   <!-- ================= 목록 ================= -->
   <section id="listView">
     <div class="list-head">
-      <h1>广场<span class="ko">자유게시판</span></h1>
+      <h1 data-i18n="board_h1">广场</h1>
       <div class="acts">
-        <button id="refreshBtn">刷新</button>
-        <button class="btn-primary" id="openWriteBtn">写帖子</button>
+        <button id="refreshBtn" data-i18n="refresh">刷新</button>
+        <button class="btn-primary" id="openWriteBtn" data-i18n="write_post">写帖子</button>
       </div>
     </div>
 
     <section class="write" id="writePanel" hidden>
       <form id="postForm" novalidate>
-        <input type="text" id="postTitle" maxlength="100" autocomplete="off"
-               placeholder="标题 · 제목" required />
-        <textarea id="postBody" maxlength="5000" required
-                  placeholder="请勿填写他人真实姓名、联系方式等个人信息。"></textarea>
+        <input type="text" id="postTitle" maxlength="100" autocomplete="off" data-i18n-ph="title_ph" required />
+        <textarea id="postBody" maxlength="5000" data-i18n-ph="body_ph" required></textarea>
         <div class="err" id="postErr" hidden></div>
         <div class="w-foot">
-          <label class="chk"><input type="checkbox" id="postAnon" checked /> 匿名</label>
-          <button type="submit" class="btn-primary" id="postSubmit">发布</button>
-          <button type="button" id="postCancel">取消</button>
+          <label class="chk"><input type="checkbox" id="postAnon" checked /> <span data-i18n="anon">匿名</span></label>
+          <button type="submit" class="btn-primary" id="postSubmit" data-i18n="publish">发布</button>
+          <button type="button" id="postCancel" data-i18n="cancel">取消</button>
           <span class="msg" id="postStatus"></span>
           <span class="count"><span id="bodyCount">0</span>/5000</span>
         </div>
       </form>
     </section>
 
-    <div id="postList"><div class="state">加载中…</div></div>
+    <div id="postList"><div class="state" data-i18n="loading">加载中…</div></div>
 
-    <div class="more-wrap" id="moreWrap" hidden><button id="moreBtn">加载更多</button></div>
+    <div class="more-wrap" id="moreWrap" hidden><button id="moreBtn" data-i18n="more">加载更多</button></div>
   </section>
 
   <!-- ================= 상세 ================= -->
   <section id="detailView" hidden>
-    <button class="back" id="backBtn">← 返回</button>
+    <button class="back" id="backBtn" data-i18n="back">← 返回</button>
     <div id="detailContent"></div>
   </section>
 
-  <footer>
-    禁止人身攻击、辱骂、歧视、广告及涉及他人隐私的内容。被举报 5 次以上自动隐藏。<br />
-    게시물에 대한 법적 책임은 작성자 본인에게 있습니다. · CAU 中国留学生社区
-  </footer>
-</div>
-
-<!-- ================= 로그인 ================= -->
-<div class="backdrop" id="authModal" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-    <h2 id="authTitle">登录</h2>
-    <form id="authForm" novalidate>
-      <div id="nickRow" hidden>
-        <label for="authNick">昵称 <span class="ko-sub">닉네임 2~12자</span></label>
-        <input type="text" id="authNick" maxlength="12" autocomplete="nickname" />
-      </div>
-      <label for="authEmail">邮箱 <span class="ko-sub">이메일</span></label>
-      <input type="email" id="authEmail" autocomplete="email" required />
-      <label for="authPw">密码 <span class="ko-sub">비밀번호 6자 이상</span></label>
-      <input type="password" id="authPw" autocomplete="current-password" minlength="6" required />
-      <div class="row">
-        <button type="submit" class="btn-primary" id="authSubmit">登录</button>
-        <button type="button" id="authClose">关闭</button>
-      </div>
-      <p class="msg" id="authStatus" style="margin:10px 0 0;"></p>
-    </form>
-    <p class="switch"><span id="switchText">还没有账号？</span>
-      <button type="button" id="switchBtn">注册</button></p>
-  </div>
+  <footer data-i18n-html="board_footer"></footer>
+  <p class="qna-link"><a href="qna.html" data-i18n="qna_link">意见反馈 · 问答</a></p>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="i18n.js"></script>
+<script src="auth.js"></script>
 <script>
 (function () {
   "use strict";
 
-  // service_role 키는 절대 여기에 넣지 않는다.
-  const SUPABASE_URL      = "https://ltmvvsmraejnuboyjarx.supabase.co";
-  const SUPABASE_ANON_KEY = "sb_publishable_IQou3ShN90xCLGfXQ8_vZQ_mXRC6be9";
   const PAGE_SIZE = 20;
-
   const $ = (id) => document.getElementById(id);
-  const banner = $("configBanner");
+  const t = (...a) => I18N.t(...a);
 
-  let sb = null;
-  try {
-    if (!window.supabase || typeof window.supabase.createClient !== "function") throw 0;
-    sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-  } catch (e) {
-    banner.hidden = false;
-    banner.textContent = "无法加载数据库组件，请检查网络后刷新。 / 라이브러리를 불러오지 못했습니다.";
-    return;
-  }
+  if (!window.CAUAuth) return;
+  const sb = CAUAuth.getClient();
+  if (!sb) return;
 
   let session = null, myLikes = new Set, offset = 0, loading = false, currentPost = null;
 
@@ -328,80 +263,17 @@ footer{
 
   function timeAgo(iso) {
     const d = (Date.now() - new Date(iso).getTime()) / 1000;
-    if (d < 60) return "刚刚";
-    if (d < 3600) return Math.floor(d / 60) + "分钟前";
-    if (d < 86400) return Math.floor(d / 3600) + "小时前";
-    if (d < 604800) return Math.floor(d / 86400) + "天前";
-    const t = new Date(iso);
-    return (t.getMonth() + 1) + "/" + t.getDate();
+    if (d < 60) return t("ago_now");
+    if (d < 3600) return t("ago_min", Math.floor(d / 60));
+    if (d < 86400) return t("ago_hour", Math.floor(d / 3600));
+    if (d < 604800) return t("ago_day", Math.floor(d / 86400));
+    const dt = new Date(iso);
+    return (dt.getMonth() + 1) + "/" + dt.getDate();
   }
-  const who = (r) => r.is_anonymous ? (r.is_mine ? "匿名（我）" : "匿名") : (r.nickname || "匿名");
+  const who = (r) => r.is_anonymous ? (r.is_mine ? t("anon_me") : t("anon_plain")) : (r.nickname || t("anon_plain"));
   const say = (el, m, bad) => { el.textContent = m || ""; el.style.color = bad ? "var(--gold)" : "var(--ink-soft)"; };
 
-  // ---------- 인증 ----------
-  const authModal = $("authModal");
-  let mode = "login";
-
-  function renderAuth() {
-    if (session) {
-      const n = session.user.user_metadata && session.user.user_metadata.nickname;
-      $("who").textContent = n || session.user.email;
-      $("loginBtn").hidden = true; $("logoutBtn").hidden = false;
-    } else {
-      $("who").textContent = "";
-      $("loginBtn").hidden = false; $("logoutBtn").hidden = true;
-    }
-  }
-
-  function openAuth(m) {
-    mode = m || "login";
-    const up = mode === "signup";
-    $("authTitle").textContent = up ? "注册 · 회원가입" : "登录 · 로그인";
-    $("authSubmit").textContent = up ? "注册" : "登录";
-    $("nickRow").hidden = !up;
-    $("switchText").textContent = up ? "已有账号？" : "还没有账号？";
-    $("switchBtn").textContent = up ? "登录" : "注册";
-    say($("authStatus"), "");
-    authModal.hidden = false;
-    (up ? $("authNick") : $("authEmail")).focus();
-  }
-  const closeAuth = () => { authModal.hidden = true; $("authForm").reset(); };
-
-  $("loginBtn").addEventListener("click", () => openAuth("login"));
-  $("authClose").addEventListener("click", closeAuth);
-  $("switchBtn").addEventListener("click", () => openAuth(mode === "signup" ? "login" : "signup"));
-  authModal.addEventListener("click", (e) => { if (e.target === authModal) closeAuth(); });
-  $("logoutBtn").addEventListener("click", () => sb.auth.signOut());
-
-  $("authForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const st = $("authStatus");
-    const email = $("authEmail").value.trim(), pw = $("authPw").value, nick = $("authNick").value.trim();
-    if (!email || !pw) return say(st, "请填写邮箱和密码。", true);
-    if (mode === "signup") {
-      if (nick.length < 2 || nick.length > 12) return say(st, "昵称 2~12 个字符。 / 닉네임은 2~12자.", true);
-      if (pw.length < 6) return say(st, "密码至少 6 位。", true);
-    }
-    $("authSubmit").disabled = true; say(st, "处理中…");
-    try {
-      if (mode === "signup") {
-        const { data, error } = await sb.auth.signUp({ email, password: pw, options: { data: { nickname: nick } } });
-        if (error) throw error;
-        if (!data.session) { say(st, "已发送验证邮件，请查收。 / 인증 메일을 확인해주세요."); $("authSubmit").disabled = false; return; }
-      } else {
-        const { error } = await sb.auth.signInWithPassword({ email, password: pw });
-        if (error) throw error;
-      }
-      closeAuth();
-    } catch (err) {
-      const m = String(err && err.message || err);
-      say(st, /Invalid login/i.test(m) ? "邮箱或密码不正确。 / 이메일 또는 비밀번호가 올바르지 않습니다."
-        : /already registered/i.test(m) ? "该邮箱已注册，请直接登录。"
-        : /rate limit/i.test(m) ? "请求过于频繁，请稍后再试。" : m, true);
-    } finally { $("authSubmit").disabled = false; }
-  });
-
-  const needLogin = () => session ? true : (openAuth("login"), false);
+  const needLogin = CAUAuth.needLogin;
 
   // ---------- 목록 ----------
   const postList = $("postList");
@@ -414,7 +286,7 @@ footer{
 
   const rowHTML = (p) => {
     const liked = myLikes.has(p.id);
-    const initial = p.is_anonymous ? (p.is_mine ? "我" : "匿") : esc((p.nickname || "?").charAt(0));
+    const initial = p.is_anonymous ? (p.is_mine ? t("badge_me") : t("badge_anon")) : esc((p.nickname || "?").charAt(0));
     const badgeCls = "badge" + (p.is_mine ? " mine" : "");
     return '<button class="post-row" data-id="' + p.id + '">' +
       '<span class="' + badgeCls + '">' + initial + "</span>" +
@@ -433,7 +305,7 @@ footer{
   async function loadPosts(reset) {
     if (loading) return;
     loading = true;
-    if (reset) { offset = 0; myLikes = new Set; postList.innerHTML = '<div class="state">加载中…</div>'; }
+    if (reset) { offset = 0; myLikes = new Set; postList.innerHTML = '<div class="state">' + esc(t("loading")) + "</div>"; }
 
     const { data, error } = await sb.from("posts_public")
       .select("id,title,body,is_anonymous,nickname,like_count,comment_count,created_at,is_mine")
@@ -442,14 +314,13 @@ footer{
     loading = false;
 
     if (error) {
-      postList.innerHTML = '<div class="state">加载失败：' + esc(error.message) +
-        '<br /><span class="ko-sub">schema_board.sql 을 먼저 실행해주세요.</span></div>';
+      postList.innerHTML = '<div class="state">' + esc(t("load_fail")) + esc(error.message) + "</div>";
       return;
     }
     await fetchMyLikes(data.map((p) => p.id));
     if (reset) postList.innerHTML = "";
     if (!data.length && offset === 0) {
-      postList.innerHTML = '<div class="state">还没有帖子，来发第一条吧<br /><span class="ko-sub">아직 글이 없습니다</span></div>';
+      postList.innerHTML = '<div class="state">' + esc(t("empty_posts")) + "</div>";
     } else {
       postList.insertAdjacentHTML("beforeend", data.map(rowHTML).join(""));
     }
@@ -485,15 +356,15 @@ footer{
     err.hidden = true;
     if (!title || !body) {
       err.hidden = false;
-      err.textContent = !title ? "请填写标题。 / 제목을 입력해주세요." : "请填写内容。 / 내용을 입력해주세요.";
+      err.textContent = !title ? t("err_title") : t("err_body");
       return;
     }
-    $("postSubmit").disabled = true; say(st, "发布中…");
+    $("postSubmit").disabled = true; say(st, t("publishing"));
     const { error } = await sb.from("posts").insert({
       author_id: session.user.id, title, body, is_anonymous: $("postAnon").checked
     });
     $("postSubmit").disabled = false;
-    if (error) return say(st, "发布失败：" + error.message, true);
+    if (error) return say(st, t("post_fail") + error.message, true);
     $("postForm").reset(); $("bodyCount").textContent = "0"; say(st, "");
     writePanel.hidden = true; loadPosts(true);
   });
@@ -502,18 +373,18 @@ footer{
   const detail = $("detailContent");
 
   const likeHTML = (liked, n) =>
-    ICON_HEART(liked) + '<span style="margin-left:5px">共鸣 <span id="likeNum">' + n + "</span></span>";
+    ICON_HEART(liked) + '<span style="margin-left:5px">' + esc(t("like")) + ' <span id="likeNum">' + n + "</span></span>";
 
   async function openPost(id) {
     $("listView").hidden = true; $("detailView").hidden = false;
-    detail.innerHTML = '<div class="state">加载中…</div>';
+    detail.innerHTML = '<div class="state">' + esc(t("loading")) + "</div>";
 
     const { data: p, error } = await sb.from("posts_public")
       .select("id,title,body,is_anonymous,nickname,like_count,comment_count,created_at,is_mine")
       .eq("id", id).maybeSingle();
 
     if (error || !p) {
-      detail.innerHTML = '<div class="state">帖子不存在或已被删除。<br /><span class="ko-sub">삭제되었거나 없는 글입니다</span></div>';
+      detail.innerHTML = '<div class="state">' + esc(t("post_gone")) + "</div>";
       return;
     }
     currentPost = p;
@@ -530,24 +401,34 @@ footer{
       '<div class="d-body">' + esc(p.body) + "</div>" +
       '<div class="d-acts">' +
         '<button class="like' + (liked ? " on" : "") + '" id="likeBtn">' + likeHTML(liked, p.like_count) + "</button>" +
-        '<button id="reportBtn">举报</button>' +
-        (p.is_mine ? '<button id="delBtn">删除</button>' : "") +
+        '<button id="reportBtn">' + esc(t("report")) + "</button>" +
+        (p.is_mine ? '<button id="delBtn">' + esc(t("del")) + "</button>" : "") +
       "</div>" +
-      '<div class="c-head">评论 <span id="cmtNum">' + p.comment_count + "</span></div>" +
-      '<div id="commentList"><div class="state">加载中…</div></div>' +
-      '<form class="c-form" id="commentForm">' +
-        '<textarea id="commentBody" maxlength="1000" placeholder="写评论… · 댓글"></textarea>' +
-        '<button type="submit" class="btn-primary" id="commentSubmit">发送</button>' +
-      "</form>" +
-      '<div style="display:flex;align-items:center;gap:10px;margin-top:8px">' +
-        '<label class="chk"><input type="checkbox" id="commentAnon" checked /> 匿名</label>' +
-        '<span class="msg" id="commentStatus"></span></div>';
+      '<div class="c-head">' + esc(t("comments")) + ' <span id="cmtNum">' + p.comment_count + "</span></div>" +
+      '<div id="commentList"><div class="state">' + esc(t("loading")) + "</div></div>" +
+      commentAreaHTML();
 
     $("likeBtn").addEventListener("click", toggleLike);
     $("reportBtn").addEventListener("click", () => report("post", p.id));
     if ($("delBtn")) $("delBtn").addEventListener("click", delPost);
-    $("commentForm").addEventListener("submit", addComment);
+    if ($("commentForm")) $("commentForm").addEventListener("submit", addComment);
+    if ($("commentLoginBtn")) $("commentLoginBtn").addEventListener("click", () => CAUAuth.openAuth("login"));
     loadComments(p.id);
+  }
+
+  // 로그인한 사람에게만 댓글 입력칸을 보여준다. 로그인 전에는 안내 문구 + 로그인 버튼.
+  function commentAreaHTML() {
+    if (!session) {
+      return '<div class="c-login"><span>' + esc(t("comment_login_prompt")) + "</span>" +
+        '<button type="button" class="btn-primary" id="commentLoginBtn">' + esc(t("login")) + "</button></div>";
+    }
+    return '<form class="c-form" id="commentForm">' +
+        '<textarea id="commentBody" maxlength="1000" placeholder="' + esc(t("comment_ph")) + '"></textarea>' +
+        '<button type="submit" class="btn-primary" id="commentSubmit">' + esc(t("comment_send")) + "</button>" +
+      "</form>" +
+      '<div style="display:flex;align-items:center;gap:10px;margin-top:8px">' +
+        '<label class="chk"><input type="checkbox" id="commentAnon" checked /> ' + esc(t("anon")) + "</label>" +
+        '<span class="msg" id="commentStatus"></span></div>';
   }
 
   async function toggleLike() {
@@ -566,21 +447,21 @@ footer{
   }
 
   async function delPost() {
-    if (!confirm("确定要删除这条帖子吗？ / 삭제할까요?")) return;
+    if (!confirm(t("confirm_del_post"))) return;
     const { error } = await sb.from("posts").update({ is_deleted: true }).eq("id", currentPost.id);
-    if (error) return alert("删除失败：" + error.message);
+    if (error) return alert(t("del_fail") + error.message);
     location.hash = ""; loadPosts(true);
   }
 
   async function report(type, id) {
     if (!needLogin()) return;
-    const reason = prompt("举报理由（选填） / 신고 사유 (선택)");
+    const reason = prompt(t("report_prompt"));
     if (reason === null) return;
     const { error } = await sb.from("reports").insert({
       target_type: type, target_id: id, reporter_id: session.user.id, reason: reason || null
     });
-    if (error) return alert(/duplicate|unique/i.test(error.message) ? "您已举报过该内容。" : "举报失败：" + error.message);
-    alert("已收到举报。 / 신고가 접수되었습니다.");
+    if (error) return alert(/duplicate|unique/i.test(error.message) ? t("report_dup") : t("report_fail") + error.message);
+    alert(t("report_ok"));
   }
 
   // ---------- 댓글 ----------
@@ -591,26 +472,26 @@ footer{
       .select("id,post_id,body,is_anonymous,nickname,anon_no,is_op,created_at,is_mine")
       .eq("post_id", postId).order("created_at", { ascending: true });
 
-    if (error) { box.innerHTML = '<div class="state">加载失败：' + esc(error.message) + "</div>"; return; }
-    if (!data.length) { box.innerHTML = '<div class="state">还没有评论 <span class="ko-sub">· 첫 댓글을 남겨보세요</span></div>'; return; }
+    if (error) { box.innerHTML = '<div class="state">' + esc(t("load_fail")) + esc(error.message) + "</div>"; return; }
+    if (!data.length) { box.innerHTML = '<div class="state">' + esc(t("no_comments")) + "</div>"; return; }
 
     box.innerHTML = data.map((c) => {
-      const name = (!c.is_anonymous && c.nickname) ? esc(c.nickname) : (c.is_op ? "楼主" : "匿名" + c.anon_no);
+      const name = (!c.is_anonymous && c.nickname) ? esc(c.nickname) : (c.is_op ? t("op") : t("anon_n", c.anon_no));
       return '<div class="c-item">' +
         '<span class="c-who' + (c.is_op ? " op" : "") + '">' + name + "</span>" +
         '<span style="font-size:11.5px;color:var(--ink-faint);margin-left:7px">' + timeAgo(c.created_at) + "</span>" +
         '<div class="c-body">' + esc(c.body) + "</div>" +
-        '<div class="c-foot"><button data-rep="' + c.id + '">举报</button>' +
-          (c.is_mine ? '<button data-del="' + c.id + '">删除</button>' : "") + "</div></div>";
+        '<div class="c-foot"><button data-rep="' + c.id + '">' + esc(t("report")) + "</button>" +
+          (c.is_mine ? '<button data-del="' + c.id + '">' + esc(t("del")) + "</button>" : "") + "</div></div>";
     }).join("");
 
     box.querySelectorAll("[data-rep]").forEach((b) =>
       b.addEventListener("click", () => report("comment", +b.dataset.rep)));
     box.querySelectorAll("[data-del]").forEach((b) =>
       b.addEventListener("click", async () => {
-        if (!confirm("删除这条评论？ / 댓글을 삭제할까요?")) return;
+        if (!confirm(t("confirm_del_comment"))) return;
         const { error } = await sb.from("comments").update({ is_deleted: true }).eq("id", +b.dataset.del);
-        if (error) return alert("删除失败：" + error.message);
+        if (error) return alert(t("del_fail") + error.message);
         loadComments(postId);
       }));
   }
@@ -619,13 +500,13 @@ footer{
     e.preventDefault();
     if (!needLogin()) return;
     const body = $("commentBody").value.trim(), st = $("commentStatus");
-    if (!body) return say(st, "请填写评论内容。", true);
-    $("commentSubmit").disabled = true; say(st, "发送中…");
+    if (!body) return say(st, t("err_comment"), true);
+    $("commentSubmit").disabled = true; say(st, t("comment_sending"));
     const { error } = await sb.from("comments").insert({
       post_id: currentPost.id, author_id: session.user.id, body, is_anonymous: $("commentAnon").checked
     });
     $("commentSubmit").disabled = false;
-    if (error) return say(st, "发送失败：" + error.message, true);
+    if (error) return say(st, t("comment_fail") + error.message, true);
     $("commentBody").value = ""; say(st, "");
     const n = $("cmtNum"); if (n) n.textContent = +n.textContent + 1;
     loadComments(currentPost.id);
@@ -642,12 +523,17 @@ footer{
   $("backBtn").addEventListener("click", () => { location.hash = ""; });
 
   // ---------- 시작 ----------
-  sb.auth.getSession().then(({ data }) => {
-    session = data.session; renderAuth();
+  CAUAuth.ready().then((s) => {
+    session = s;
     loadPosts(true).then(route);
   });
-  sb.auth.onAuthStateChange((_e, s) => {
-    session = s; myLikes = new Set; renderAuth();
+  CAUAuth.onChange((s) => {
+    session = s; myLikes = new Set;
+    if (currentPost) openPost(currentPost.id); else loadPosts(true);
+  });
+  // 언어를 바꾸면 목록/상세를 새 언어로 다시 그린다(글·댓글 본문은 작성된 그대로).
+  I18N.onChange(() => {
+    $("postErr").hidden = true; say($("postStatus"), "");
     if (currentPost) openPost(currentPost.id); else loadPosts(true);
   });
 })();

@@ -1,0 +1,197 @@
+<meta charset="utf-8" />
+<title data-i18n="title_qna">意见反馈 · CAU 中国留学生</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+
+<nav class="topnav">
+  <div class="topnav-inner">
+    <a class="brand" href="index.html"><span class="brand-cau">CAU</span> <span class="brand-name" data-i18n="brand_name">中国留学生</span></a>
+    <div class="tabs">
+      <a href="index.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span data-i18n="tab_cal">日历</span></a>
+      <a href="reviews.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span data-i18n="tab_rev">点评</span></a>
+      <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span data-i18n="tab_board">广场</span></a>
+    </div>
+    <div class="nav-auth">
+      <span class="who" id="who"></span>
+      <button id="loginBtn" data-i18n="login" hidden>登录</button>
+      <button id="logoutBtn" data-i18n="logout" hidden>退出</button>
+    </div>
+  </div>
+</nav>
+
+<div class="wrap">
+  <header class="page">
+    <div class="eyebrow"><span data-i18n="qna_eyebrow">意见反馈 · 问答</span></div>
+    <h1 data-i18n="qna_h1">意见反馈</h1>
+    <p class="sub" data-i18n="qna_sub"></p>
+  </header>
+
+  <p class="config-banner" id="configBanner" hidden></p>
+
+  <div class="toolbar">
+    <button class="btn-primary" id="toggleForm" data-i18n="qna_write">+ 留言</button>
+  </div>
+
+  <section id="qnaForm" hidden>
+    <form id="addForm" novalidate>
+      <div class="form-row">
+        <label for="category" data-i18n="qna_category">类型</label>
+        <select id="category" name="category" required></select>
+        <div class="field-error" id="err-category" hidden></div>
+      </div>
+      <div class="form-row">
+        <label for="body" data-i18n="qna_body">内容</label>
+        <textarea id="body" name="body" maxlength="1000" data-i18n-ph="qna_body_ph" required></textarea>
+        <div class="field-error" id="err-body" hidden></div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-primary" id="submitBtn" data-i18n="qna_submit">提交</button>
+        <button type="button" id="cancelForm" data-i18n="cancel">取消</button>
+        <span class="form-status" id="formStatus"></span>
+      </div>
+    </form>
+  </section>
+
+  <div class="review-list" id="qnaList">
+    <p class="review-state" data-i18n="loading">加载中…</p>
+  </div>
+
+  <footer data-i18n="qna_footer"></footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="i18n.js"></script>
+<script src="auth.js"></script>
+<script>
+  const t = (...a) => I18N.t(...a);
+  const $ = (id) => document.getElementById(id);
+  const sb = window.CAUAuth ? CAUAuth.getClient() : null;
+
+  // author_id 는 일부러 읽지 않는다(익명).
+  const COLS = "id,category,body,created_at,reply,replied_at";
+  const CATS = ["feature", "bug", "other"];
+
+  const list = $("qnaList"), form = $("qnaForm"), addForm = $("addForm");
+  let items = [], loaded = false, loadFailed = false, isAdmin = false;
+
+  function fillCategory(){
+    const sel = $("category"), keep = sel.value;
+    sel.innerHTML = "";
+    const o0 = document.createElement("option"); o0.value = ""; o0.textContent = t("rev_select_ph"); sel.appendChild(o0);
+    CATS.forEach(c => { const o = document.createElement("option"); o.value = c; o.textContent = t("qna_cat_" + c); sel.appendChild(o); });
+    sel.value = keep;
+  }
+  fillCategory();
+
+  function fmt(iso){
+    const d = new Date(iso);
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
+  }
+  function clearErrors(){
+    ["category","body"].forEach(id => { const e = $("err-" + id); e.hidden = true; e.textContent = ""; });
+  }
+  function showError(id, m){ const e = $("err-" + id); e.textContent = m; e.hidden = false; }
+
+  function showState(key){
+    list.innerHTML = "";
+    const p = document.createElement("p"); p.className = "review-state"; p.textContent = t(key); list.appendChild(p);
+  }
+
+  function render(){
+    if (loadFailed) return showState("rev_load_fail");
+    if (!loaded) return showState("loading");
+    if (!items.length) return showState("qna_empty");
+
+    list.innerHTML = "";
+    items.forEach(q => {
+      const card = document.createElement("div");
+      card.className = "review-card";
+      card.innerHTML = '<div class="review-top"><span class="credit-badge"></span></div>' +
+        '<div class="review-text"></div><div class="review-date"></div>';
+      card.querySelector(".credit-badge").textContent = t("qna_cat_" + q.category);
+      card.querySelector(".review-text").textContent = q.body;
+      card.querySelector(".review-date").textContent = fmt(q.created_at);
+
+      if (q.reply) {
+        const r = document.createElement("div"); r.className = "qna-reply";
+        const w = document.createElement("div"); w.className = "qna-who"; w.textContent = t("qna_answer");
+        const b = document.createElement("div"); b.textContent = q.reply; b.style.whiteSpace = "pre-wrap";
+        r.append(w, b); card.appendChild(r);
+      } else {
+        const w = document.createElement("div"); w.className = "qna-wait"; w.textContent = t("qna_waiting"); card.appendChild(w);
+      }
+
+      if (isAdmin) {
+        const box = document.createElement("div"); box.className = "qna-admin";
+        const ta = document.createElement("textarea"); ta.placeholder = t("qna_reply_ph"); ta.maxLength = 2000; ta.value = q.reply || "";
+        const btn = document.createElement("button"); btn.type = "button"; btn.className = "btn-primary";
+        btn.textContent = t(q.reply ? "qna_reply_edit" : "qna_reply_btn");
+        btn.addEventListener("click", async () => {
+          const txt = ta.value.trim(); if (!txt) return;
+          btn.disabled = true;
+          const { data, error } = await sb.from("inquiries")
+            .update({ reply: txt, replied_at: new Date().toISOString() }).eq("id", q.id).select(COLS);
+          btn.disabled = false;
+          if (error || !data || !data.length) { console.error(error); btn.textContent = t("qna_fail"); return; }
+          Object.assign(q, data[0]); render();
+        });
+        box.append(ta, btn); card.appendChild(box);
+      }
+      list.appendChild(card);
+    });
+  }
+
+  async function load(){
+    const { data, error } = await sb.from("inquiries").select(COLS).order("created_at", { ascending: false });
+    if (error) { console.error(error); loadFailed = true; } else { items = data; loaded = true; }
+    render();
+  }
+
+  // 운영자 여부: admins 표에서 내 줄이 보이면 운영자(RLS 가 본인 줄만 보여줌)
+  async function checkAdmin(){
+    const s = CAUAuth.getSession();
+    if (!s) { isAdmin = false; return render(); }
+    const { data } = await sb.from("admins").select("user_id").maybeSingle();
+    isAdmin = Boolean(data);
+    render();
+  }
+
+  if (!sb) {
+    $("toggleForm").disabled = true; loadFailed = true; render();
+  } else {
+    $("toggleForm").addEventListener("click", () => {
+      if (!CAUAuth.needLogin()) return;
+      form.hidden = !form.hidden;
+      if (!form.hidden) $("category").focus();
+    });
+    $("cancelForm").addEventListener("click", () => { addForm.reset(); clearErrors(); form.hidden = true; });
+
+    addForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!CAUAuth.needLogin()) return;
+      clearErrors();
+      const v = { category: $("category").value, body: $("body").value.trim() };
+      let ok = true;
+      if (!CATS.includes(v.category)) { showError("category", t("qna_err_cat")); ok = false; }
+      if (v.body.length < 5) { showError("body", t("qna_err_body")); ok = false; }
+      if (!ok) return;
+
+      $("submitBtn").disabled = true; $("formStatus").textContent = t("qna_submitting");
+      const { data, error } = await sb.from("inquiries").insert(v).select(COLS);
+      $("submitBtn").disabled = false;
+      if (error || !data || !data.length) { console.error(error); $("formStatus").textContent = t("qna_fail"); return; }
+      $("formStatus").textContent = "";
+      items.unshift(data[0]); render();
+      addForm.reset(); form.hidden = true;
+    });
+
+    CAUAuth.onChange(checkAdmin);
+    CAUAuth.ready().then(checkAdmin);
+    load();
+  }
+
+  I18N.onChange(() => { fillCategory(); clearErrors(); $("formStatus").textContent = ""; render(); });
+</script>

@@ -1,65 +1,97 @@
-<title>学期日历 · 学历翻译计划</title>
+<meta charset="utf-8" />
+<title data-i18n="title_cal">学期日历 · CAU 中国留学生</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" href="styles.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 
 <nav class="topnav">
   <div class="topnav-inner">
-    <span class="brand">CAU 学历日历 · 강의평</span>
+    <a class="brand" href="index.html"><span class="brand-cau">CAU</span> <span class="brand-name" data-i18n="brand_name">中国留学生</span></a>
     <div class="tabs">
-      <a href="index.html" class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>학사일정 · 日历</span></a>
-      <a href="reviews.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span>강의평 · 点评</span></a>
-      <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span>广场 · 게시판</span></a>
+      <a href="index.html" class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span data-i18n="tab_cal">日历</span></a>
+      <a href="reviews.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span data-i18n="tab_rev">点评</span></a>
+      <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span data-i18n="tab_board">广场</span></a>
     </div>
   </div>
 </nav>
 
 <div class="wrap">
   <header class="page">
-    <div class="eyebrow"><span>2026학년도 2학기</span><span class="dot"></span><span>2026年秋季学期</span></div>
-    <h1>学期日历</h1>
-    <p class="sub">整理自学校官方학사일정(学历),按时间顺序列出选课、缴费、考试等重要日期。点击"添加到日历",到期前会自动提醒。</p>
-    <p class="disclaimer">⚠ 以上日期整理自学校官方《2026학년도 신입생 학사가이드》,但学期中若有变更以综合信息系统(포털)最新公告为准,请定期核对。</p>
+    <div class="eyebrow"><span data-i18n="cal_eyebrow">2026年秋季学期</span></div>
+    <h1 data-i18n="cal_h1">学期日历</h1>
+    <p class="sub" data-i18n="cal_sub"></p>
+    <p class="disclaimer" data-i18n="cal_disclaimer"></p>
   </header>
-
-  <div class="toolbar">
-    <button class="btn-primary" id="downloadAll">⬇ 下载完整学期日历(.ics)</button>
-    <span class="btn" style="border-style:dashed; color:var(--ink-soft); cursor:default;">提醒会在到期前 3 天自动提示</span>
-  </div>
 
   <div class="notice" id="noticeBanner" hidden></div>
 
-  <div id="calendar"></div>
-  <div class="cal-detail empty" id="calendarDetail">点击日历上有颜色标记的日期查看详细安排 · 색이 있는 날짜를 클릭하면 상세 일정이 표시됩니다.</div>
+  <div class="cal-nav">
+    <button type="button" class="cal-arrow" id="prevMonthBtn" data-i18n-aria="cal_aria_prev" aria-label="上个月">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="cal-nav-center">
+      <div class="cal-title" id="calTitle" aria-live="polite"></div>
+      <div class="cal-nav-select">
+        <select id="yearSelect" aria-label="Year"></select>
+        <select id="monthSelect" aria-label="Month"></select>
+        <button type="button" class="cal-today" id="todayBtn" data-i18n="cal_today">回到今天</button>
+      </div>
+    </div>
+    <button type="button" class="cal-arrow" id="nextMonthBtn" data-i18n-aria="cal_aria_next" aria-label="下个月">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+  </div>
 
-  <footer>
-    本页面为独立静态页面,数据全部保存在浏览器本地生成,不会上传或收集任何个人信息。日历文件(.ics)可导入 Apple 日历、Outlook,或通过下方按钮一键添加到 Google 日历。
-  </footer>
+  <div id="calendar"></div>
+  <div class="cal-detail empty" id="calendarDetail" data-i18n="cal_hint">点击日期查看当天安排</div>
+
+  <footer class="page-foot" data-i18n="cal_footer"></footer>
+  <p class="qna-link"><a href="qna.html" data-i18n="qna_link">意见反馈 · 问答</a></p>
 </div>
 
+<script src="i18n.js"></script>
 <script>
   // 학회 담당자용: 아래 EVENTS 배열의 날짜/텍스트만 학교 공식 학사일정으로 교체하면 됩니다.
   const EVENTS = [
     { id:"reg",     group:"2026年8月",  zh:"选课(网上选课)",             ko:"수강신청",             start:"2026-08-12", end:"2026-08-14", tag:"选课", tagClass:"选课",
-      note:"登录学校「综合信息系统」进行网上选课,系统开放期间可修改课程,请注意年级分批开放选课的时间段。" },
+      note:"登录学校「综合信息系统」进行网上选课,系统开放期间可修改课程,请注意年级分批开放选课的时间段。",
+      noteKo:"학교 「종합정보시스템」에서 수강신청을 진행합니다. 학년별로 신청 가능 시간이 나뉘어 있으니 본인 차례를 꼭 확인하세요." },
     { id:"tuition", group:"2026年8月",  zh:"在校生注册(缴纳学费)",        ko:"재학생 등록(학비납부)", start:"2026-08-25", end:"2026-08-28", tag:"缴费", tagClass:"缴费",
-      note:"通过学校指定银行或网上银行缴纳本学期学费,逾期未缴可能导致已选课程被自动取消,请务必按时完成。" },
+      note:"通过学校指定银行或网上银行缴纳本学期学费,逾期未缴可能导致已选课程被自动取消,请务必按时完成。",
+      noteKo:"학교 지정 은행 또는 인터넷뱅킹으로 이번 학기 등록금을 납부합니다. 기한 내 미납 시 신청한 과목이 자동 취소될 수 있으니 꼭 기한을 지키세요." },
     { id:"start",   group:"2026年9月",  zh:"开学",                       ko:"개강",                 start:"2026-09-01", end:"2026-09-01", tag:"学期", tagClass:"学期",
-      note:"2026学年度第2学期正式开始上课。" },
+      note:"2026学年度第2学期正式开始上课。",
+      noteKo:"2026학년도 2학기 수업이 시작됩니다." },
     { id:"adddrop", group:"2026年9月",  zh:"选课确认与调整(补退选)",      ko:"수강신청 정정",         start:"2026-09-01", end:"2026-09-07", tag:"选课", tagClass:"选课",
-      note:"可在此期间调整已选课程(退选、替换),超过期限将无法更改本学期课表。" },
+      note:"可在此期间调整已选课程(退选、替换),超过期限将无法更改本学期课表。",
+      noteKo:"이 기간에 신청한 과목을 정정(취소·변경)할 수 있습니다. 기간이 지나면 이번 학기 시간표를 바꿀 수 없습니다." },
     { id:"dropdeadline", group:"2026年9月", zh:"退课截止(不留W记录),第4周", ko:"수강과목 취소 마감, 4주차", start:"2026-09-22", end:"2026-09-28", tag:"截止", tagClass:"截止",
-      note:"本学期最后可直接退课且成绩单不留痕迹的截止日,过期后如需退课将标注为W,请谨慎决定。" },
+      note:"本学期最后可直接退课且成绩单不留痕迹的截止日,过期后如需退课将标注为W,请谨慎决定。",
+      noteKo:"성적표에 기록이 남지 않고 과목을 취소할 수 있는 마지막 기간입니다. 이후 취소하면 W로 표시되니 신중하게 결정하세요." },
     { id:"chuseok", group:"2026年9月",  zh:"中秋节假期",                  ko:"추석 연휴",             start:"2026-09-24", end:"2026-09-26", tag:"假期", tagClass:"假期",
-      note:"学校放假,行政办公室暂停对外服务,请提前处理需要到校办理的事务。" },
+      note:"学校放假,行政办公室暂停对外服务,请提前处理需要到校办理的事务。",
+      noteKo:"학교가 쉬며 행정실도 대외 업무를 하지 않습니다. 학교에서 처리해야 할 일은 미리 마치세요." },
     { id:"midterm", group:"2026年10月", zh:"期中考试,第8周",              ko:"중간고사, 8주차",       start:"2026-10-20", end:"2026-10-26", tag:"考试", tagClass:"考试",
-      note:"具体考试时间以各科教授公布为准,请留意教学网站(LMS)通知。" },
+      note:"具体考试时间以各科教授公布为准,请留意教学网站(LMS)通知。",
+      noteKo:"시험 일정은 과목별 교수님 공지를 따릅니다. 수업 사이트(LMS) 공지를 확인하세요." },
     { id:"final",   group:"2026年12月", zh:"期末考试,第16周",             ko:"기말고사, 16주차",      start:"2026-12-15", end:"2026-12-21", tag:"考试", tagClass:"考试",
-      note:"考试周,部分课程可能安排在教室以外的地点,请提前确认。" },
+      note:"考试周,部分课程可能安排在教室以外的地点,请提前确认。",
+      noteKo:"기말고사 기간입니다. 일부 과목은 강의실 외 장소에서 시험을 볼 수 있으니 미리 확인하세요." },
     { id:"vacation",group:"2026年12月", zh:"寒假",                        ko:"겨울방학",              start:"2026-12-22", end:"2027-02-28", tag:"假期", tagClass:"假期",
-      note:"本学期课程结束,进入寒假,下学期开学时间请另行留意学校通知。" },
+      note:"本学期课程结束,进入寒假,下学期开学时间请另行留意学校通知。",
+      noteKo:"이번 학기 수업이 끝나고 겨울방학에 들어갑니다. 다음 학기 개강일은 학교 공지를 따로 확인하세요." },
     { id:"grades",  group:"2026年12月", zh:"成绩查询与成绩异议申请",       ko:"성적조회 및 성적정정",  start:"2026-12-29", end:"2027-01-03", tag:"截止", tagClass:"截止",
-      note:"可在综合信息系统查询本学期成绩,如对成绩有疑问需在此期间内向任课教授提出异议申请。" },
+      note:"可在综合信息系统查询本学期成绩,如对成绩有疑问需在此期间内向任课教授提出异议申请。",
+      noteKo:"종합정보시스템에서 이번 학기 성적을 조회할 수 있습니다. 성적에 이의가 있다면 이 기간 안에 담당 교수님께 정정 신청을 하세요." },
   ];
+
+  const t = (...a) => I18N.t(...a);
+  const evTitle = (ev) => I18N.lang === "ko" ? ev.ko : ev.zh;
+  const evNote  = (ev) => I18N.lang === "ko" ? ev.noteKo : ev.note;
+  const esc = (v) => String(v == null ? "" : v)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
 
   function pad(n){ return String(n).padStart(2,"0"); }
   function toICSDate(iso){ return iso.replaceAll("-",""); }
@@ -68,51 +100,16 @@
     d.setDate(d.getDate() + days);
     return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   }
-  function escapeICS(text){
-    return String(text).replace(/\\/g,"\\\\").replace(/,/g,"\\,").replace(/;/g,"\\;").replace(/\n/g,"\\n");
-  }
-  function nowStamp(){
+  function todayISO(){
     const d = new Date();
-    return `${d.getUTCFullYear()}${pad(d.getUTCMonth()+1)}${pad(d.getUTCDate())}T${pad(d.getUTCHours())}${pad(d.getUTCMinutes())}${pad(d.getUTCSeconds())}Z`;
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   }
-  function buildVEVENT(ev){
-    const dtstart = toICSDate(ev.start);
-    const dtend = toICSDate(addDaysISO(ev.end, 1));
-    const summary = escapeICS(`${ev.zh}(${ev.ko})`);
-    const desc = escapeICS(ev.note);
-    return [
-      "BEGIN:VEVENT",
-      `UID:${ev.id}-2026s2@academic-calendar.local`,
-      `DTSTAMP:${nowStamp()}`,
-      `DTSTART;VALUE=DATE:${dtstart}`,
-      `DTEND;VALUE=DATE:${dtend}`,
-      `SUMMARY:${summary}`,
-      `DESCRIPTION:${desc}`,
-      "BEGIN:VALARM",
-      "ACTION:DISPLAY",
-      `DESCRIPTION:${summary}`,
-      "TRIGGER:-P3D",
-      "END:VALARM",
-      "END:VEVENT",
-    ].join("\r\n");
+  function shortDate(iso){
+    const [, m, d] = iso.split("-").map(Number);
+    return `${m}/${d}`;
   }
-  function buildVCALENDAR(vevents){
-    return [
-      "BEGIN:VCALENDAR",
-      "VERSION:2.0",
-      "PRODID:-//academic-calendar//KR-ZH//EN",
-      "CALSCALE:GREGORIAN",
-      ...vevents,
-      "END:VCALENDAR",
-    ].join("\r\n");
-  }
-  function download(filename, content){
-    const blob = new Blob([content], { type: "text/calendar;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url; a.download = filename;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  function formatRange(ev){
+    return ev.start === ev.end ? shortDate(ev.start) : `${shortDate(ev.start)}–${shortDate(ev.end)}`;
   }
   function googleCalendarUrl(ev){
     const dates = `${toICSDate(ev.start)}/${toICSDate(addDaysISO(ev.end,1))}`;
@@ -120,14 +117,11 @@
       action:"TEMPLATE",
       text:`${ev.zh}(${ev.ko})`,
       dates,
-      details:ev.note,
+      details:evNote(ev),
     });
     return `https://calendar.google.com/calendar/render?${params.toString()}`;
   }
 
-  function eventsOnDay(iso){
-    return EVENTS.filter(ev => iso >= ev.start && iso <= ev.end);
-  }
   function daysInMonth(y, m){ return new Date(y, m, 0).getDate(); }
   function firstWeekdayOfMonth(y, m){ return new Date(y, m - 1, 1).getDay(); }
   function monthRangeFromEvents(events){
@@ -152,11 +146,11 @@
     calendarDetail.classList.remove("empty");
     calendarDetail.innerHTML = `
       <div class="row-top">
-        <span class="zh">${ev.zh}</span>
-        <span class="ko">${ev.ko}</span>
-        <span class="tag tag-${ev.tagClass}">${ev.tag}</span>
+        <span class="zh">${esc(evTitle(ev))}</span>
+        <span class="tag tag-${ev.tagClass}">${esc(t("tag_" + ev.tag))}</span>
       </div>
-      <div class="note">${ev.note}</div>
+      <div class="day-detail-period">${formatRange(ev)}</div>
+      <div class="note">${esc(evNote(ev))}</div>
       <div class="event-actions"></div>
     `;
     const actions = calendarDetail.querySelector(".event-actions");
@@ -164,88 +158,241 @@
     const gbtn = document.createElement("a");
     gbtn.className = "btn"; gbtn.target = "_blank"; gbtn.rel = "noopener";
     gbtn.href = googleCalendarUrl(ev);
-    gbtn.textContent = "+ Google 日历";
+    gbtn.textContent = t("cal_add_google");
     actions.appendChild(gbtn);
-
-    const ibtn = document.createElement("button");
-    ibtn.textContent = "⬇ .ics (Apple / Outlook)";
-    ibtn.addEventListener("click", () => {
-      download(`${ev.id}.ics`, buildVCALENDAR([buildVEVENT(ev)]));
-    });
-    actions.appendChild(ibtn);
 
     calendarDetail.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
-  const WEEKDAYS = [["日","일"],["一","월"],["二","화"],["三","수"],["四","목"],["五","금"],["六","토"]];
   const cal = document.getElementById("calendar");
 
-  monthRangeFromEvents(EVENTS).forEach(({ year, month }) => {
+  // 한 달을 7칸씩 주(week) 단위로 쪼갠 배열로 변환. 월 앞뒤 빈 칸은 null.
+  function weeksOfMonth(year, month) {
+    const startWeekday = firstWeekdayOfMonth(year, month);
+    const totalDays = daysInMonth(year, month);
+    const cells = [];
+    for (let i = 0; i < startWeekday; i++) cells.push(null);
+    for (let d = 1; d <= totalDays; d++) cells.push(`${year}-${pad(month)}-${pad(d)}`);
+    while (cells.length % 7 !== 0) cells.push(null);
+    const weeks = [];
+    for (let i = 0; i < cells.length; i += 7) weeks.push(cells.slice(i, i + 7));
+    return weeks;
+  }
+
+  // 해당 주(week)에 걸쳐있는 이벤트들을 요일 칸(0~6) 기준으로 clip하고,
+  // 겹치는 이벤트는 서로 다른 레인(줄)에 배치해서 여러 날짜를 가로지르는
+  // 막대(bar) 하나로 이어 그릴 수 있게 세그먼트 목록을 만든다.
+  function weekSegments(week) {
+    const isoList = week.filter(Boolean);
+    if (!isoList.length) return [];
+    const weekStart = isoList[0], weekEnd = isoList[isoList.length - 1];
+    const segs = [];
+    EVENTS.forEach(ev => {
+      if (ev.end < weekStart || ev.start > weekEnd) return;
+      const segStart = ev.start < weekStart ? weekStart : ev.start;
+      const segEnd = ev.end > weekEnd ? weekEnd : ev.end;
+      const startCol = week.indexOf(segStart);
+      const endCol = week.indexOf(segEnd);
+      if (startCol === -1 || endCol === -1) return;
+      segs.push({ ev, startCol, endCol, span: endCol - startCol + 1 });
+    });
+    segs.sort((a, b) => a.startCol - b.startCol || b.span - a.span);
+    const laneEnds = [];
+    segs.forEach(seg => {
+      let lane = laneEnds.findIndex(end => end < seg.startCol);
+      if (lane === -1) { lane = laneEnds.length; laneEnds.push(seg.endCol); }
+      else laneEnds[lane] = seg.endCol;
+      seg.lane = lane;
+    });
+    return segs;
+  }
+
+  const MONTH_RANGE = monthRangeFromEvents(EVENTS);
+  let currentIndex = 0;
+  let selectedDateIso = null;
+
+  function renderMonth(year, month) {
+    cal.innerHTML = "";
     const monthCard = document.createElement("div");
     monthCard.className = "cal-card";
 
-    const label = document.createElement("p");
-    label.className = "month-label";
-    label.textContent = `${year}年${month}月 · ${year}년 ${month}월`;
-    monthCard.appendChild(label);
+    const weekdayRow = document.createElement("div");
+    weekdayRow.className = "cal-weekday-row";
+    t("weekdays").forEach((name, i) => {
+      const wd = document.createElement("div");
+      wd.className = "cal-weekday" + (i === 0 ? " sun" : i === 6 ? " sat" : "");
+      wd.textContent = name;
+      weekdayRow.appendChild(wd);
+    });
+    monthCard.appendChild(weekdayRow);
 
     const grid = document.createElement("div");
     grid.className = "cal-grid";
+    const todayIso = todayISO();
 
-    WEEKDAYS.forEach(([zh, ko]) => {
-      const wd = document.createElement("div");
-      wd.className = "cal-weekday";
-      wd.innerHTML = `${zh}<span class="cal-weekday-ko">${ko}</span>`;
-      grid.appendChild(wd);
-    });
+    weeksOfMonth(year, month).forEach(week => {
+      const weekEl = document.createElement("div");
+      weekEl.className = "cal-week";
 
-    const startWeekday = firstWeekdayOfMonth(year, month);
-    for (let i = 0; i < startWeekday; i++) {
-      const empty = document.createElement("div");
-      empty.className = "cal-day empty";
-      grid.appendChild(empty);
-    }
+      // 같은 주의 7칸이 항상 같은 높이를 갖도록, 이 주에서 실제로 필요한
+      // 레인(줄) 수를 먼저 계산해서 모든 날짜 칸에 동일한 grid-row span을 준다.
+      const segs = weekSegments(week);
+      const laneCount = segs.reduce((max, s) => Math.max(max, s.lane + 1), 0);
+      const rowSpan = laneCount + 1; // +1 = 날짜 숫자 행
 
-    const totalDays = daysInMonth(year, month);
-    for (let d = 1; d <= totalDays; d++) {
-      const iso = `${year}-${pad(month)}-${pad(d)}`;
-      const dayCell = document.createElement("div");
-      dayCell.className = "cal-day";
-
-      const dayNum = document.createElement("div");
-      dayNum.className = "daynum";
-      dayNum.textContent = d;
-      dayCell.appendChild(dayNum);
-
-      const eventsWrap = document.createElement("div");
-      eventsWrap.className = "cal-day-events";
-      eventsOnDay(iso).forEach(ev => {
-        const chip = document.createElement("button");
-        chip.type = "button";
-        chip.className = `cal-chip tag-${ev.tagClass}`;
-        chip.textContent = ev.zh;
-        chip.setAttribute("aria-label", `${ev.zh}(${ev.ko}), ${ev.start} ~ ${ev.end}`);
-        chip.addEventListener("click", () => showDetail(ev));
-        eventsWrap.appendChild(chip);
+      week.forEach((iso, col) => {
+        const dayCell = document.createElement("div");
+        dayCell.className = "cal-day" + (iso ? "" : " empty");
+        if (iso === todayIso) dayCell.classList.add("today");
+        if (iso === selectedDateIso) dayCell.classList.add("selected");
+        dayCell.style.gridColumn = String(col + 1);
+        dayCell.style.gridRow = `1 / span ${rowSpan}`;
+        if (iso) {
+          const dayNum = document.createElement("div");
+          dayNum.className = "daynum";
+          dayNum.textContent = Number(iso.slice(-2));
+          dayCell.appendChild(dayNum);
+          dayCell.addEventListener("click", () => selectDate(iso));
+        }
+        weekEl.appendChild(dayCell);
       });
-      dayCell.appendChild(eventsWrap);
 
-      grid.appendChild(dayCell);
-    }
+      segs.forEach(seg => {
+        const bar = document.createElement("button");
+        bar.type = "button";
+        bar.className = `cal-bar tag-${seg.ev.tagClass}`;
+        bar.style.gridColumn = `${seg.startCol + 1} / span ${seg.span}`;
+        bar.style.gridRow = `${seg.lane + 2}`;
+        const barLabel = document.createElement("span");
+        barLabel.className = "cal-bar-label";
+        barLabel.textContent = evTitle(seg.ev);
+        bar.appendChild(barLabel);
+        bar.setAttribute("aria-label", `${evTitle(seg.ev)}, ${seg.ev.start} ~ ${seg.ev.end}`);
+        bar.addEventListener("click", () => showDetail(seg.ev));
+        weekEl.appendChild(bar);
+      });
+
+      grid.appendChild(weekEl);
+    });
 
     monthCard.appendChild(grid);
     cal.appendChild(monthCard);
+  }
+
+  function selectDate(iso){
+    selectedDateIso = iso;
+    const { year, month } = MONTH_RANGE[currentIndex];
+    renderMonth(year, month);
+    showDayDetail(iso);
+    calendarDetail.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  // 날짜 칸 클릭 시, 그 날짜에 걸쳐있는 모든 일정(start ~ end)을 목록으로 표시
+  function showDayDetail(iso){
+    const dayEvents = EVENTS
+      .filter(ev => ev.start <= iso && iso <= ev.end)
+      .sort((a, b) => a.start.localeCompare(b.start));
+
+    if (!dayEvents.length) {
+      calendarDetail.classList.add("empty");
+      calendarDetail.textContent = t("cal_none");
+      return;
+    }
+
+    calendarDetail.classList.remove("empty");
+    calendarDetail.innerHTML = "";
+    const list = document.createElement("div");
+    list.className = "day-detail-list";
+    dayEvents.forEach(ev => {
+      const item = document.createElement("div");
+      item.className = "day-detail-item";
+      item.innerHTML = `
+        <div class="row-top">
+          <span class="zh">${esc(evTitle(ev))}</span>
+          <span class="tag tag-${ev.tagClass}">${esc(t("tag_" + ev.tag))}</span>
+        </div>
+        <div class="day-detail-period">${formatRange(ev)}</div>
+        <div class="note">${esc(evNote(ev))}</div>
+      `;
+      list.appendChild(item);
+    });
+    calendarDetail.appendChild(list);
+  }
+
+  // 월 이동(이전/다음 달 버튼, 연·월 select)
+  const yearSelect = document.getElementById("yearSelect");
+  const monthSelect = document.getElementById("monthSelect");
+  const prevMonthBtn = document.getElementById("prevMonthBtn");
+  const nextMonthBtn = document.getElementById("nextMonthBtn");
+
+  function populateYearSelect(){
+    const years = [...new Set(MONTH_RANGE.map(m => m.year))];
+    yearSelect.innerHTML = years.map(y => `<option value="${y}">${t("cal_year", y)}</option>`).join("");
+  }
+  function populateMonthSelect(year){
+    const months = MONTH_RANGE.filter(m => m.year === year).map(m => m.month);
+    monthSelect.innerHTML = months.map(m => `<option value="${m}">${t("cal_month", m)}</option>`).join("");
+  }
+  function updateNavUI(){
+    const { year, month } = MONTH_RANGE[currentIndex];
+    yearSelect.value = String(year);
+    populateMonthSelect(year);
+    monthSelect.value = String(month);
+    prevMonthBtn.disabled = currentIndex === 0;
+    nextMonthBtn.disabled = currentIndex === MONTH_RANGE.length - 1;
+    document.getElementById("calTitle").textContent = t("cal_title", year, month);
+  }
+  function goToIndex(idx, keepIso){
+    currentIndex = Math.max(0, Math.min(MONTH_RANGE.length - 1, idx));
+    const { year, month } = MONTH_RANGE[currentIndex];
+    selectedDateIso = keepIso || `${year}-${pad(month)}-01`;
+    updateNavUI();
+    renderMonth(year, month);
+    showDayDetail(selectedDateIso);
+  }
+
+  prevMonthBtn.addEventListener("click", () => goToIndex(currentIndex - 1));
+  nextMonthBtn.addEventListener("click", () => goToIndex(currentIndex + 1));
+  yearSelect.addEventListener("change", () => {
+    const year = Number(yearSelect.value);
+    populateMonthSelect(year);
+    const month = Number(monthSelect.value);
+    const idx = MONTH_RANGE.findIndex(m => m.year === year && m.month === month);
+    goToIndex(idx === -1 ? MONTH_RANGE.findIndex(m => m.year === year) : idx);
+  });
+  monthSelect.addEventListener("change", () => {
+    const year = Number(yearSelect.value);
+    const month = Number(monthSelect.value);
+    goToIndex(MONTH_RANGE.findIndex(m => m.year === year && m.month === month));
   });
 
-  document.getElementById("downloadAll").addEventListener("click", () => {
-    download("2026-2학기-학사일정.ics", buildVCALENDAR(EVENTS.map(buildVEVENT)));
-  });
+  // 오늘이 있는 달(범위 밖이면 가장 가까운 달)로 이동
+  function goToToday(){
+    const todayIso = todayISO();
+    const idx = MONTH_RANGE.findIndex(({ year, month }) =>
+      todayIso >= `${year}-${pad(month)}-01` && todayIso <= `${year}-${pad(month)}-${pad(daysInMonth(year, month))}`);
+    if (idx !== -1) { goToIndex(idx, todayIso); return; }
+    const now = new Date();
+    const key = now.getFullYear() * 12 + now.getMonth() + 1;
+    let nearest = 0, best = Infinity;
+    MONTH_RANGE.forEach((m, i) => {
+      const diff = Math.abs((m.year * 12 + m.month) - key);
+      if (diff < best) { best = diff; nearest = i; }
+    });
+    goToIndex(nearest);
+  }
+  document.getElementById("todayBtn").addEventListener("click", goToToday);
+
+  populateYearSelect();
+
+  // 초기 진입: 오늘이 일정 범위 안이면 그 달 + 오늘을 선택, 범위 밖이면 가장 가까운 달의 1일을 선택
+  goToToday();
 
   // D-day 알림: 오늘 이후로 가장 가까운 일정을 자동으로 계산해서 보여줌
   function renderNotice(){
     const banner = document.getElementById("noticeBanner");
     if (!banner) return;
-    const todayIso = new Date().toISOString().slice(0, 10);
+    const todayIso = todayISO();
     const upcoming = EVENTS
       .filter(ev => ev.start >= todayIso)
       .sort((a, b) => a.start.localeCompare(b.start))[0];
@@ -257,8 +404,15 @@
     banner.hidden = false;
     banner.innerHTML =
       `<span class="dd">${label}</span>` +
-      `<span class="tx"><b>${upcoming.zh}</b> · ${upcoming.ko}</span>` +
+      `<span class="tx"><b>${esc(evTitle(upcoming))}</b></span>` +
       `<span class="dt">${upcoming.start.slice(5).replace("-", ".")}</span>`;
   }
   renderNotice();
+
+  // 언어를 바꾸면 달력·상세·알림·연월 선택칸을 현재 언어로 다시 그린다.
+  I18N.onChange(() => {
+    populateYearSelect();
+    goToIndex(currentIndex, selectedDateIso);
+    renderNotice();
+  });
 </script>
