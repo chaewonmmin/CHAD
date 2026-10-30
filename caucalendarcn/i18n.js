@@ -14,7 +14,7 @@ window.I18N = (function () {
   const D = {
     zh: {
       // ---- 공통 ----
-      brand_name: "中国留学生",
+      brand_name: "通通",
       tab_cal: "日历", tab_rev: "点评", tab_board: "广场",
       login: "登录", logout: "退出", close: "关闭", cancel: "取消",
       loading: "加载中…",
@@ -22,7 +22,7 @@ window.I18N = (function () {
       lang_aria: "切换为韩语",
 
       // ---- 학사일정 ----
-      title_cal: "学期日历 · CAU 中国留学生",
+      title_cal: "学期日历 · 通通",
       cal_eyebrow: "2026年秋季学期",
       cal_h1: "学期日历",
       cal_sub: "整理自学校官方学事日程,按时间顺序列出选课、缴费、考试等重要日期。点击日期查看详情,可一键添加到 Google 日历。",
@@ -41,7 +41,7 @@ window.I18N = (function () {
       "tag_假期": "假期", "tag_截止": "截止", "tag_学期": "学期",
 
       // ---- 강의평 ----
-      title_rev: "课程点评 · CAU 中国留学生",
+      title_rev: "课程点评 · 通通",
       rev_eyebrow: "中国留学生课程点评",
       rev_h1: "课程点评",
       rev_sub: "写下你上过的课程名、教授和学分,以及真实的课程评价,所有同学都能看到。",
@@ -61,6 +61,10 @@ window.I18N = (function () {
       rev_count: (n, total) => (n === total ? "共 " + total + " 条点评" : "找到 " + n + " 条(共 " + total + " 条)"),
       rev_nomatch: "没有找到相关点评。换个关键词试试?",
       rev_semester: "修读学期", rev_college: "开课学院",
+      rev_department: "开课学科",
+      rev_err_department: "请选择开课学科。",
+      rev_all_department: "全部学科",
+      rev_dept_etc: "其他(列表中没有)",
       rev_select_ph: "请选择",
       rev_err_semester: "请选择修读学期。",
       rev_err_college: "请选择开课学院。",
@@ -72,7 +76,7 @@ window.I18N = (function () {
 
       // ---- 문의(Q&A) ----
       qna_link: "意见反馈 · 问答",
-      title_qna: "意见反馈 · CAU 中国留学生",
+      title_qna: "意见反馈 · 通通",
       qna_eyebrow: "意见反馈 · 问答",
       qna_h1: "意见反馈",
       qna_sub: "对网站有建议、发现错误或有疑问,都可以在这里留言,运营者会回复。所有留言均为匿名,所有人可见。",
@@ -93,7 +97,7 @@ window.I18N = (function () {
       qna_footer: "留言将保存在服务器(Supabase)并对所有访客公开,请勿填写真实姓名或敏感信息。",
 
       // ---- 게시판 ----
-      title_board: "广场 · CAU 中国留学生",
+      title_board: "广场 · 通通",
       board_h1: "广场",
       refresh: "刷新", write_post: "写帖子",
       title_ph: "标题", body_ph: "请勿填写他人真实姓名、联系方式等个人信息。",
@@ -125,7 +129,7 @@ window.I18N = (function () {
       badge_me: "我", badge_anon: "匿",
       ago_now: "刚刚",
       ago_min: (n) => n + "分钟前", ago_hour: (n) => n + "小时前", ago_day: (n) => n + "天前",
-      board_footer: "禁止人身攻击、辱骂、歧视、广告及涉及他人隐私的内容。被举报 5 次以上自动隐藏。<br />帖子内容的法律责任由作者本人承担。· CAU 中国留学生社区",
+      board_footer: "禁止人身攻击、辱骂、歧视、广告及涉及他人隐私的内容。被举报 5 次以上自动隐藏。<br />帖子内容的法律责任由作者本人承担。· 通通 社区",
 
       // ---- 로그인 모달 ----
       auth_login_title: "登录", auth_signup_title: "注册", auth_verify_title: "验证邮箱",
@@ -154,7 +158,7 @@ window.I18N = (function () {
 
     ko: {
       // ---- 공통 ----
-      brand_name: "중국인 유학생",
+      brand_name: "통통",
       tab_cal: "학사일정", tab_rev: "강의평", tab_board: "게시판",
       login: "로그인", logout: "로그아웃", close: "닫기", cancel: "취소",
       loading: "불러오는 중…",
@@ -162,7 +166,7 @@ window.I18N = (function () {
       lang_aria: "중국어로 전환",
 
       // ---- 학사일정 ----
-      title_cal: "학사일정 · CAU 중국인 유학생",
+      title_cal: "학사일정 · 통통",
       cal_eyebrow: "2026학년도 2학기",
       cal_h1: "학사일정",
       cal_sub: "학교 공식 학사일정을 날짜순으로 정리했어요. 수강신청·등록금 납부·시험 등 주요 일정을 날짜를 눌러 확인하고, Google 캘린더에 바로 추가할 수 있습니다.",
@@ -181,7 +185,7 @@ window.I18N = (function () {
       "tag_假期": "방학·휴일", "tag_截止": "마감", "tag_学期": "학기",
 
       // ---- 강의평 ----
-      title_rev: "강의평 · CAU 중국인 유학생",
+      title_rev: "강의평 · 통통",
       rev_eyebrow: "중국인 유학생 강의평",
       rev_h1: "강의평 게시판",
       rev_sub: "수강했던 강의의 강의명·교수님·학점과 함께 솔직한 강의평을 남겨주세요. 모든 회원이 함께 볼 수 있는 공유 게시판입니다.",
@@ -201,6 +205,10 @@ window.I18N = (function () {
       rev_count: (n, total) => (n === total ? "강의평 총 " + total + "개" : "검색 결과 " + n + "개 (전체 " + total + "개)"),
       rev_nomatch: "검색 결과가 없습니다. 다른 검색어로 시도해보세요.",
       rev_semester: "수강 학기", rev_college: "단과대학",
+      rev_department: "학과",
+      rev_err_department: "학과를 선택해주세요.",
+      rev_all_department: "전체 학과",
+      rev_dept_etc: "기타(목록에 없음)",
       rev_select_ph: "선택해주세요",
       rev_err_semester: "수강 학기를 선택해주세요.",
       rev_err_college: "단과대학을 선택해주세요.",
@@ -212,7 +220,7 @@ window.I18N = (function () {
 
       // ---- 문의(Q&A) ----
       qna_link: "문의 · 건의하기",
-      title_qna: "문의 · 건의 · CAU 중국 유학생",
+      title_qna: "문의 · 건의 · 통통",
       qna_eyebrow: "문의 · 건의",
       qna_h1: "문의 · 건의 게시판",
       qna_sub: "사이트에 대한 건의, 오류 제보, 궁금한 점을 남겨주세요. 운영자가 답변드립니다. 모든 글은 익명이며 누구나 볼 수 있습니다.",
@@ -233,7 +241,7 @@ window.I18N = (function () {
       qna_footer: "작성한 글은 Supabase 데이터베이스에 저장되어 모든 방문자에게 공개됩니다. 실명이나 민감한 개인정보는 남기지 말아주세요.",
 
       // ---- 게시판 ----
-      title_board: "게시판 · CAU 중국인 유학생",
+      title_board: "게시판 · 통통",
       board_h1: "자유게시판",
       refresh: "새로고침", write_post: "글쓰기",
       title_ph: "제목", body_ph: "타인의 실명·연락처 등 개인정보는 작성하지 마세요.",
@@ -265,7 +273,7 @@ window.I18N = (function () {
       badge_me: "나", badge_anon: "익",
       ago_now: "방금",
       ago_min: (n) => n + "분 전", ago_hour: (n) => n + "시간 전", ago_day: (n) => n + "일 전",
-      board_footer: "인신공격·욕설·차별·광고 및 타인의 사생활을 침해하는 내용은 금지됩니다. 신고 5회 이상 시 자동으로 숨김 처리됩니다.<br />게시물에 대한 법적 책임은 작성자 본인에게 있습니다. · CAU 중국인 유학생 커뮤니티",
+      board_footer: "인신공격·욕설·차별·광고 및 타인의 사생활을 침해하는 내용은 금지됩니다. 신고 5회 이상 시 자동으로 숨김 처리됩니다.<br />게시물에 대한 법적 책임은 작성자 본인에게 있습니다. · 통통 커뮤니티",
 
       // ---- 로그인 모달 ----
       auth_login_title: "로그인", auth_signup_title: "회원가입", auth_verify_title: "이메일 인증",

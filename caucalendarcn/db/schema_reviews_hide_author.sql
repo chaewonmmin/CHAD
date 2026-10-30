@@ -15,8 +15,8 @@
 
 revoke select on public.reviews from anon, authenticated;
 
---  (semester, college 열은 schema_reviews_filters.sql 을 먼저 실행해서 만든 뒤에 이 파일을 실행하세요)
-grant select (course_name, professor, credit, review_text, created_at, semester, college)
+--  (semester, college, department 열은 schema_reviews_filters.sql, schema_reviews_department.sql 을 먼저 실행해서 만든 뒤에 이 파일을 실행하세요)
+grant select (course_name, professor, credit, review_text, created_at, semester, college, department)
   on public.reviews to anon, authenticated;
 
 -- 확인용(결과가 author_id 를 제외한 열만 나오면 정상):

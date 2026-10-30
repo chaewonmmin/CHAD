@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="通通 통통">
+  <!-- 뒤쪽 파란 말풍선(대화 상대) -->
+  <ellipse cx="51" cy="44" rx="11" ry="9.5" fill="#3182F6"/>
+  <path d="M56 51.5 L60.5 60 L49 54 Z" fill="#3182F6"/>
+  <circle cx="48.5" cy="44" r="1.5" fill="#fff"/>
+  <circle cx="53.5" cy="44" r="1.5" fill="#fff"/>
+  <!-- 통통한 주황 말풍선 -->
+  <circle cx="30" cy="29" r="21" fill="#FF4D3D"/>
+  <path d="M17 44 L11 57 L28 49 Z" fill="#FF4D3D"/>
+  <!-- 얼굴 -->
+  <circle cx="23" cy="29" r="2.8" fill="#1F2329"/>
+  <circle cx="37" cy="29" r="2.8" fill="#1F2329"/>
+  <circle cx="24" cy="28" r=".9" fill="#fff"/>
+  <circle cx="38" cy="28" r=".9" fill="#fff"/>
+  <ellipse cx="17.5" cy="35.5" rx="3.6" ry="2.3" fill="#FFB8AE"/>
+  <ellipse cx="42.5" cy="35.5" rx="3.6" ry="2.3" fill="#FFB8AE"/>
+  <path d="M26 35 Q30 40 34 35" fill="none" stroke="#1F2329" stroke-width="2.4" stroke-linecap="round"/>
+</svg>
