@@ -23,7 +23,8 @@
   --radius-pill:999px;
   --shadow: 0 1px 2px rgba(31,35,41,0.05), 0 2px 8px rgba(31,35,41,0.06);
   --shadow-md: 0 2px 6px rgba(31,35,41,0.05), 0 10px 26px rgba(31,35,41,0.09);
-  --font-sans:"Noto Sans SC","PingFang SC",-apple-system,BlinkMacSystemFont,"Microsoft YaHei","Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-sans:"LXGW WenKai","Gowun Dodum","PingFang SC","Microsoft YaHei","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-head:"LXGW WenKai","Gowun Dodum","PingFang SC","Microsoft YaHei","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
 }
 @media (prefers-color-scheme: dark){
   :root{
@@ -67,6 +68,14 @@
   --shadow-md: 0 2px 6px rgba(31,35,41,0.05), 0 10px 26px rgba(31,35,41,0.09);
 }
 
+html:lang(ko){
+  --font-sans:"Gowun Dodum","LXGW WenKai","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --font-head:"Gowun Batang","Gowun Dodum","LXGW WenKai","Apple SD Gothic Neo","Malgun Gothic",serif;
+}
+h1,h2,h3,.cal-title,.review-course,.brand{font-family:var(--font-head);}
+/* 글자를 한 단계 두껍게: 폰트 자체가 얇아서 외곽선을 살짝 더해 굵기를 맞춤 */
+body{-webkit-text-stroke:0.35px currentColor;}
+h1,h2,h3,.cal-title,.review-course,.brand{-webkit-text-stroke:0.7px currentColor;}
 *{box-sizing:border-box;}
 [hidden]{display:none !important;}
 body{
@@ -90,7 +99,19 @@ body{
   max-width:760px; margin:0 auto; padding:12px 24px;
   display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
 }
-.brand{font-size:14px; font-weight:700; color:var(--ink); letter-spacing:0.01em; text-decoration:none; white-space:nowrap;}
+.brand{display:inline-flex; align-items:center; gap:7px; font-size:19px; font-weight:700; color:var(--ink); letter-spacing:0.02em; text-decoration:none; white-space:nowrap;}
+.brand-mark{display:block; width:30px; height:30px; transform-origin:50% 90%;}
+/* 통통 튀는 로고: 처음 열릴 때 한 번, 마우스를 올리면 다시 */
+@keyframes tong{
+  0%{transform:translateY(0) scale(1,1);}
+  28%{transform:translateY(-6px) scale(.94,1.07);}
+  55%{transform:translateY(0) scale(1.09,.9);}
+  75%{transform:translateY(-2px) scale(.98,1.03);}
+  100%{transform:translateY(0) scale(1,1);}
+}
+.brand-mark{animation:tong .8s .35s 1 both;}
+.brand:hover .brand-mark{animation:tong .7s 1;}
+@media (prefers-reduced-motion: reduce){ .brand-mark, .brand:hover .brand-mark{animation:none;} }
 .lang-btn{
   flex:0 0 auto; font-size:12px; font-weight:700; padding:5px 11px; min-height:0;
   border-radius:var(--radius-pill); border:1px solid var(--line);
@@ -505,7 +526,6 @@ footer{
 }
 
 @media (max-width:480px){
-  .brand-name{display:none;}
   .lang-btn{font-size:11.5px; padding:4px 9px;}
   /* 상단 탭 메뉴: 한자+한글 라벨이 줄바꿈되지 않도록 폰트를 줄이고 nowrap 처리 */
   .tabs{gap:2px;}
@@ -523,4 +543,15 @@ footer{
   .notice .dd{order:1;}
   .notice .dt{order:2; margin-left:auto;}
   .notice .tx{order:3; flex:1 1 100%; line-height:1.5;}
+}
+
+/* 아주 좁은 화면(≤360px): 글꼴이 넓어도 상단 메뉴가 두 줄로 꺾이지 않도록 한 번 더 줄임 */
+@media (max-width:360px){
+  .brand{font-size:16px; gap:5px;}
+  .brand-mark{width:26px; height:26px;}
+  .tabs{margin-left:2px !important;}
+  .tab-link{font-size:10.5px; padding:6px 5px;}
+  .lang-btn{font-size:11px; padding:4px 7px;}
+  .nav-auth button{font-size:11px; padding:4px 6px;}
+  .topnav-inner{padding:6px 8px; gap:4px;}
 }

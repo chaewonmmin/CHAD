@@ -1,0 +1,9 @@
+/* 서비스 전용 폰트 (jsDelivr 에서 필요한 글자 조각만 내려받음)
+   - 중국어: LXGW WenKai(霞鹜文楷) — 손글씨 느낌의 따뜻한 해서체 계열, 오픈소스(OFL)
+   - 한국어: Gowun Dodum(고운돋움, 본문) / Gowun Batang(고운바탕, 제목) — 오픈소스(OFL) */
+@import url("https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-regular.css");
+@import url("https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/lxgwwenkai-bold.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/gowun-dodum@5.3.0/korean-400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/gowun-dodum@5.3.0/latin-400.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/gowun-batang@5.3.0/korean-700.css");
+@import url("https://cdn.jsdelivr.net/npm/@fontsource/gowun-batang@5.3.0/latin-700.css");
