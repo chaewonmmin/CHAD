@@ -1,5 +1,5 @@
 <meta charset="utf-8" />
-<title>강의평 게시판 · 学历翻译计划</title>
+<title data-i18n="title_rev">课程点评 · CAU 中国留学生</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link rel="stylesheet" href="styles.css" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -8,110 +8,99 @@
 
 <nav class="topnav">
   <div class="topnav-inner">
-    <span class="brand">CAU <span class="brand-zh">学历日历</span><span class="brand-sep"> · </span><span class="brand-ko">강의평</span></span>
+    <a class="brand" href="index.html"><span class="brand-cau">CAU</span> <span class="brand-name" data-i18n="brand_name">中国留学生</span></a>
     <div class="tabs">
-      <a href="index.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span class="tab-ko">학사일정</span><span class="tab-sep"> · </span><span class="tab-zh">日历</span></a>
-      <a href="reviews.html" class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span class="tab-ko">강의평</span><span class="tab-sep"> · </span><span class="tab-zh">点评</span></a>
-      <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span class="tab-zh">广场</span><span class="tab-sep"> · </span><span class="tab-ko">게시판</span></a>
+      <a href="index.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span data-i18n="tab_cal">日历</span></a>
+      <a href="reviews.html" class="tab-link active"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.6-4.6 4.1 1.3 6-5.4-3.1-5.4 3.1 1.3-6-4.6-4.1 6.1-.6z"/></svg><span data-i18n="tab_rev">点评</span></a>
+      <a href="board.html" class="tab-link"><svg class="tab-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg><span data-i18n="tab_board">广场</span></a>
     </div>
     <div class="nav-auth">
       <span class="who" id="who"></span>
-      <button id="loginBtn" hidden>登录</button>
-      <button id="logoutBtn" hidden>退出</button>
+      <button id="loginBtn" data-i18n="login" hidden>登录</button>
+      <button id="logoutBtn" data-i18n="logout" hidden>退出</button>
     </div>
   </div>
 </nav>
 
 <div class="wrap">
   <header class="page">
-    <div class="eyebrow"><span>중국인 유학생 강의평</span><span class="dot"></span><span>中国留学生课程点评</span></div>
-    <h1>강의평 게시판</h1>
-    <p class="sub">수강했던 강의의 강의명·교수님·학점과 함께 솔직한 강의평을 남겨주세요. 모든 회원이 함께 볼 수 있는 공유 게시판입니다。</p>
+    <div class="eyebrow"><span data-i18n="rev_eyebrow">中国留学生课程点评</span></div>
+    <h1 data-i18n="rev_h1">课程点评</h1>
+    <p class="sub" data-i18n="rev_sub"></p>
   </header>
 
-  <p class="config-banner" id="configBanner" hidden>
-    ⚠ 데이터베이스가 아직 연결되지 않았습니다. 관리자에게 문의해주세요. / 数据库尚未连接,请联系管理员完成配置。
-  </p>
+  <p class="config-banner" id="configBanner" hidden></p>
 
   <div class="toolbar">
-    <button class="btn-primary" id="toggleForm">+ 리뷰 작성 · 写点评</button>
+    <button class="btn-primary" id="toggleForm" data-i18n="rev_write">+ 写点评</button>
   </div>
 
   <section id="reviewForm" hidden>
     <form id="addForm" novalidate>
       <div class="form-row">
-        <label for="courseName">강의명 · 课程名称</label>
+        <label for="courseName" data-i18n="rev_course">课程名称</label>
         <input type="text" id="courseName" name="courseName" required />
         <div class="field-error" id="err-courseName" hidden></div>
       </div>
       <div class="form-row">
-        <label for="professor">교수님 · 教授</label>
+        <label for="semester" data-i18n="rev_semester">修读学期</label>
+        <select id="semester" name="semester" required></select>
+        <div class="field-error" id="err-semester" hidden></div>
+      </div>
+      <div class="form-row">
+        <label for="college" data-i18n="rev_college">开课学院</label>
+        <select id="college" name="college" required></select>
+        <div class="field-error" id="err-college" hidden></div>
+      </div>
+      <div class="form-row">
+        <label for="professor" data-i18n="rev_prof">教授</label>
         <input type="text" id="professor" name="professor" required />
         <div class="field-error" id="err-professor" hidden></div>
       </div>
       <div class="form-row">
-        <label for="credit">학점 · 学分</label>
+        <label for="credit" data-i18n="rev_credit">学分</label>
         <input type="number" id="credit" name="credit" min="0" max="12" step="1" required />
         <div class="field-error" id="err-credit" hidden></div>
       </div>
       <div class="form-row">
-        <label for="reviewText">강의평 · 点评内容</label>
+        <label for="reviewText" data-i18n="rev_text">点评内容</label>
         <textarea id="reviewText" name="reviewText" minlength="5" required></textarea>
         <div class="field-error" id="err-reviewText" hidden></div>
       </div>
       <div class="form-actions">
-        <button type="submit" class="btn-primary" id="submitBtn">등록하기 · 提交</button>
-        <button type="button" id="cancelForm">취소 · 取消</button>
+        <button type="submit" class="btn-primary" id="submitBtn" data-i18n="rev_submit">提交</button>
+        <button type="button" id="cancelForm" data-i18n="cancel">取消</button>
         <span class="form-status" id="formStatus"></span>
       </div>
     </form>
   </section>
 
+  <div class="rev-search">
+    <svg class="s-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input type="search" id="searchInput" autocomplete="off" data-i18n-ph="rev_search_ph" data-i18n-aria="rev_search_aria" />
+    <button type="button" class="s-clear" id="searchClear" aria-label="clear" hidden>✕</button>
+  </div>
+  <div class="rev-filters">
+    <select id="filterSemester" aria-label="semester"></select>
+    <select id="filterCollege" aria-label="college"></select>
+    <button type="button" class="rev-reset" id="filterReset" data-i18n="rev_reset" hidden>重置筛选</button>
+  </div>
+  <div class="rev-count" id="revCount"></div>
+
   <div class="review-list" id="reviewList">
-    <p class="review-state">가져오는 중… / 加载中…</p>
+    <p class="review-state" data-i18n="loading">加载中…</p>
   </div>
 
-  <footer>
-    이 페이지에 작성한 강의평은 Supabase 데이터베이스에 저장되어 모든 방문자에게 공개됩니다. 실명이나 민감한 개인정보는 남기지 말아주세요。<br />
-    本页面的点评内容将保存在服务器(Supabase)中,所有访客可见,请勿填写真实姓名或敏感信息。
-  </footer>
-</div>
-
-<div class="backdrop" id="authModal" hidden>
-  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="authTitle">
-    <h2 id="authTitle">登录</h2>
-    <form id="authForm" novalidate>
-      <div id="nickRow" hidden>
-        <label for="authNick">昵称 <span class="ko-sub">닉네임 2~12자</span></label>
-        <input type="text" id="authNick" maxlength="12" autocomplete="nickname" />
-      </div>
-      <div id="emailRow">
-        <label for="authEmail">邮箱 <span class="ko-sub">학교 이메일 @cau.ac.kr</span></label>
-        <input type="email" id="authEmail" autocomplete="email" required />
-      </div>
-      <div id="pwRow">
-        <label for="authPw">密码 <span class="ko-sub">비밀번호 6자 이상</span></label>
-        <input type="password" id="authPw" autocomplete="current-password" minlength="6" required />
-      </div>
-      <div id="verifyRow" hidden>
-        <label for="authCode">验证码 <span class="ko-sub">이메일로 받은 인증번호</span></label>
-        <input type="text" id="authCode" inputmode="numeric" autocomplete="one-time-code" maxlength="8" />
-      </div>
-      <div class="row">
-        <button type="submit" class="btn-primary" id="authSubmit">登录</button>
-        <button type="button" id="authClose">关闭</button>
-      </div>
-      <p class="msg" id="authStatus" style="margin:10px 0 0;"></p>
-      <p class="switch" id="resendRow" hidden><button type="button" id="resendBtn">重新发送验证码 · 인증번호 다시 받기</button></p>
-    </form>
-    <p class="switch" id="switchRow"><span id="switchText">还没有账号？</span>
-      <button type="button" id="switchBtn">注册</button></p>
-  </div>
+  <footer data-i18n="rev_footer"></footer>
+  <p class="qna-link"><a href="qna.html" data-i18n="qna_link">意见反馈 · 问答</a></p>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="i18n.js"></script>
 <script src="auth.js"></script>
 <script>
+  const t = (...a) => I18N.t(...a);
+
   const toggleFormBtn = document.getElementById("toggleForm");
   const reviewForm = document.getElementById("reviewForm");
   const addForm = document.getElementById("addForm");
@@ -119,12 +108,178 @@
   const submitBtn = document.getElementById("submitBtn");
   const formStatus = document.getElementById("formStatus");
   const reviewList = document.getElementById("reviewList");
+  const searchInput = document.getElementById("searchInput");
+  const searchClear = document.getElementById("searchClear");
+  const revCount = document.getElementById("revCount");
+  const filterSemester = document.getElementById("filterSemester");
+  const filterCollege = document.getElementById("filterCollege");
+  const filterReset = document.getElementById("filterReset");
+  const formSemester = document.getElementById("semester");
+  const formCollege = document.getElementById("college");
+
+  // 드롭다운 채우기(언어가 바뀌어도 현재 선택값은 유지)
+  function fillSelect(el, firstLabel, options){
+    const keep = el.value;
+    el.innerHTML = "";
+    const o0 = document.createElement("option");
+    o0.value = ""; o0.textContent = firstLabel; el.appendChild(o0);
+    options.forEach(([v, label]) => {
+      const o = document.createElement("option");
+      o.value = v; o.textContent = label; el.appendChild(o);
+    });
+    el.value = keep;
+  }
+  function fillSelects(){
+    const sem = SEMESTERS.map(s => [s, t("rev_term", s)]);
+    const col = COLLEGES.map(c => [c[0], collegeLabel(c[0])]);
+    fillSelect(formSemester, t("rev_select_ph"), sem);
+    fillSelect(formCollege, t("rev_select_ph"), col);
+    fillSelect(filterSemester, t("rev_all_semester"), sem);
+    fillSelect(filterCollege, t("rev_all_college"), col);
+  }
 
   // Supabase 클라이언트/로그인 모달은 auth.js(공용, board.html과 공유)가 담당.
   const supabaseClient = window.CAUAuth ? CAUAuth.getClient() : null;
 
+  // author_id 는 일부러 읽지 않는다(작성자가 서로 연결되어 보이지 않도록).
+  const REVIEW_COLS = "course_name,professor,credit,review_text,created_at,semester,college";
+
+  // 중앙대학교 단과대학 (저장값은 한국어, 화면 표시는 언어에 맞춰 변환)
+  const COLLEGES = [
+    ["인문대학", "人文学院"], ["사회과학대학", "社会科学学院"], ["사범대학", "师范学院"],
+    ["경영경제대학", "经营经济学院"], ["적십자간호대학", "红十字护理学院"], ["자연과학대학", "自然科学学院"],
+    ["공과대학", "工学院"], ["창의ICT공과대학", "创意ICT工学院"], ["소프트웨어대학", "软件学院"],
+    ["약학대학", "药学院"], ["의과대학", "医学院"], ["예술대학", "艺术学院"],
+    ["생명공학대학", "生命工学院"], ["예술공학대학", "艺术工学院"], ["기타(교양 등)", "其他(通识等)"],
+  ];
+  const collegeLabel = (ko) => {
+    const c = COLLEGES.find(x => x[0] === ko);
+    return c ? (I18N.lang === "ko" ? c[0] : c[1]) : ko;
+  };
+  // 학기: 19-1 ~ 26-2 (최신순). 저장값 "26-1"
+  const SEMESTERS = [];
+  for (let y = 26; y >= 19; y--) { SEMESTERS.push(y + "-2"); SEMESTERS.push(y + "-1"); }
+  fillSelects();
+
+  let reviews = [];
+  let loaded = false;    // 불러오기 성공 여부
+  let loadFailed = false;
+
+  function clearErrors(){
+    ["courseName","semester","college","professor","credit","reviewText"].forEach(id => {
+      const el = document.getElementById(`err-${id}`);
+      el.hidden = true; el.textContent = "";
+    });
+  }
+
+  function showError(id, message){
+    const el = document.getElementById(`err-${id}`);
+    el.textContent = message;
+    el.hidden = false;
+  }
+
+  function validate(values){
+    let ok = true;
+    if (!values.course_name) { showError("courseName", t("rev_err_course")); ok = false; }
+    if (!SEMESTERS.includes(values.semester)) { showError("semester", t("rev_err_semester")); ok = false; }
+    if (!COLLEGES.some(c => c[0] === values.college)) { showError("college", t("rev_err_college")); ok = false; }
+    if (!values.professor) { showError("professor", t("rev_err_prof")); ok = false; }
+    if (!Number.isInteger(values.credit) || values.credit < 0 || values.credit > 12) {
+      showError("credit", t("rev_err_credit")); ok = false;
+    }
+    if (!values.review_text || values.review_text.length < 5) {
+      showError("reviewText", t("rev_err_text")); ok = false;
+    }
+    return ok;
+  }
+
+  function formatDate(iso){
+    const d = new Date(iso);
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
+  }
+
+  // ---------- 검색 ----------
+  // 띄어쓰기로 나눈 단어가 모두 (강의명 + 교수님 + 본문) 안에 들어 있는 강의평만 보여준다.
+  const norm = (s) => String(s == null ? "" : s).toLowerCase();
+  function filteredReviews(){
+    const tokens = norm(searchInput.value).split(/\s+/).filter(Boolean);
+    const fs = filterSemester.value, fc = filterCollege.value;
+    if (!tokens.length && !fs && !fc) return reviews;
+    return reviews.filter(r => {
+      if (fs && r.semester !== fs) return false;
+      if (fc && r.college !== fc) return false;
+      const hay = norm(r.course_name) + " " + norm(r.professor) + " " + norm(r.review_text);
+      return tokens.every(tok => hay.includes(tok));
+    });
+  }
+
+  function showState(key){
+    reviewList.innerHTML = "";
+    const p = document.createElement("p");
+    p.className = "review-state";
+    p.textContent = t(key);
+    reviewList.appendChild(p);
+  }
+
+  function renderReviews(){
+    if (loadFailed) { revCount.textContent = ""; showState("rev_load_fail"); return; }
+    if (!loaded) { revCount.textContent = ""; showState("loading"); return; }
+
+    const list = filteredReviews();
+    searchClear.hidden = !searchInput.value;
+    filterReset.hidden = !(filterSemester.value || filterCollege.value || searchInput.value);
+    revCount.textContent = reviews.length ? t("rev_count", list.length, reviews.length) : "";
+
+    if (reviews.length === 0) { showState("rev_empty"); return; }
+    if (list.length === 0) { showState("rev_nomatch"); return; }
+
+    reviewList.innerHTML = "";
+    list.forEach(r => {
+      const card = document.createElement("div");
+      card.className = "review-card";
+      card.innerHTML = `
+        <div class="review-top">
+          <span class="review-course"></span>
+          <span class="review-professor"></span>
+          <span class="credit-badge"></span>
+          <span class="term-badge"></span>
+        </div>
+        <div class="review-text"></div>
+        <div class="review-date"></div>
+      `;
+      card.querySelector(".review-course").textContent = r.course_name;
+      card.querySelector(".review-professor").textContent = r.professor;
+      card.querySelector(".credit-badge").textContent = t("rev_credit_badge", r.credit);
+      // 학기·단과대 도입 전에 작성된 옛 강의평은 값이 없을 수 있다.
+      const tb = card.querySelector(".term-badge");
+      const parts = [r.semester ? t("rev_term", r.semester) : "", r.college ? collegeLabel(r.college) : ""].filter(Boolean);
+      if (parts.length) tb.textContent = parts.join(" · "); else tb.remove();
+      card.querySelector(".review-text").textContent = r.review_text;
+      card.querySelector(".review-date").textContent = formatDate(r.created_at);
+      reviewList.appendChild(card);
+    });
+  }
+
+  async function loadReviews(){
+    const { data, error } = await supabaseClient
+      .from("reviews")
+      .select(REVIEW_COLS)
+      .order("created_at", { ascending: false });
+    if (error) {
+      console.error(error);
+      loadFailed = true;
+    } else {
+      reviews = data;
+      loaded = true;
+    }
+    renderReviews();
+  }
+
   if (!supabaseClient) {
     toggleFormBtn.disabled = true;
+    searchInput.disabled = true;
+    loadFailed = true;
+    renderReviews();
   } else {
     toggleFormBtn.addEventListener("click", () => {
       if (!CAUAuth.needLogin()) return;
@@ -144,6 +299,8 @@
 
       const values = {
         course_name: document.getElementById("courseName").value.trim(),
+        semester: formSemester.value,
+        college: formCollege.value,
         professor: document.getElementById("professor").value.trim(),
         credit: parseInt(document.getElementById("credit").value, 10),
         review_text: document.getElementById("reviewText").value.trim(),
@@ -152,102 +309,36 @@
       if (!validate(values)) return;
 
       submitBtn.disabled = true;
-      formStatus.textContent = "제출 중… / 提交中…";
+      formStatus.textContent = t("rev_submitting");
 
-      const { data, error } = await supabaseClient.from("reviews").insert(values).select();
+      const { data, error } = await supabaseClient.from("reviews").insert(values).select(REVIEW_COLS);
 
       submitBtn.disabled = false;
       if (error) {
         console.error(error);
-        formStatus.textContent = "제출에 실패했습니다. 다시 시도해주세요. / 提交失败,请重试。";
+        formStatus.textContent = t("rev_fail");
         return;
       }
 
       formStatus.textContent = "";
       reviews.unshift(data[0]);
-      renderReviews(reviews);
+      renderReviews();
       addForm.reset();
       reviewForm.hidden = true;
     });
 
+    searchInput.addEventListener("input", renderReviews);
+    filterSemester.addEventListener("change", renderReviews);
+    filterCollege.addEventListener("change", renderReviews);
+    filterReset.addEventListener("click", () => {
+      searchInput.value = ""; filterSemester.value = ""; filterCollege.value = "";
+      renderReviews();
+    });
+    searchClear.addEventListener("click", () => { searchInput.value = ""; renderReviews(); searchInput.focus(); });
+
     loadReviews();
   }
 
-  function clearErrors(){
-    ["courseName","professor","credit","reviewText"].forEach(id => {
-      const el = document.getElementById(`err-${id}`);
-      el.hidden = true; el.textContent = "";
-    });
-  }
-
-  function showError(id, message){
-    const el = document.getElementById(`err-${id}`);
-    el.textContent = message;
-    el.hidden = false;
-  }
-
-  function validate(values){
-    let ok = true;
-    if (!values.course_name) { showError("courseName", "강의명을 입력해주세요."); ok = false; }
-    if (!values.professor) { showError("professor", "교수님 성함을 입력해주세요."); ok = false; }
-    if (!Number.isInteger(values.credit) || values.credit < 0 || values.credit > 12) {
-      showError("credit", "학점은 0~12 사이의 숫자로 입력해주세요."); ok = false;
-    }
-    if (!values.review_text || values.review_text.length < 5) {
-      showError("reviewText", "강의평을 5자 이상 입력해주세요."); ok = false;
-    }
-    return ok;
-  }
-
-  function formatDate(iso){
-    const d = new Date(iso);
-    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,"0")}.${String(d.getDate()).padStart(2,"0")}`;
-  }
-
-  function renderReviews(reviews){
-    reviewList.innerHTML = "";
-    if (reviews.length === 0) {
-      reviewList.innerHTML = `<p class="review-state">아직 등록된 강의평이 없습니다. 첫 번째 강의평을 남겨보세요! / 暂无点评,快来添加第一条吧。</p>`;
-      return;
-    }
-    reviews.forEach(r => {
-      const card = document.createElement("div");
-      card.className = "review-card";
-      card.innerHTML = `
-        <div class="review-top">
-          <span class="review-course"></span>
-          <span class="review-professor"></span>
-          <span class="credit-badge"></span>
-        </div>
-        <div class="review-text"></div>
-        <div class="review-date"></div>
-      `;
-      card.querySelector(".review-course").textContent = r.course_name;
-      card.querySelector(".review-professor").textContent = r.professor;
-      card.querySelector(".credit-badge").textContent = `${r.credit}학점`;
-      card.querySelector(".review-text").textContent = r.review_text;
-      card.querySelector(".review-date").textContent = formatDate(r.created_at);
-      reviewList.appendChild(card);
-    });
-  }
-
-  let reviews = [];
-
-  async function loadReviews(){
-    if (!supabaseClient) {
-      reviewList.innerHTML = `<p class="review-state">데이터베이스가 연결되면 강의평이 이곳에 표시됩니다.</p>`;
-      return;
-    }
-    const { data, error } = await supabaseClient
-      .from("reviews")
-      .select("*")
-      .order("created_at", { ascending: false });
-    if (error) {
-      console.error(error);
-      reviewList.innerHTML = `<p class="review-state">불러오기에 실패했습니다. 새로고침 후 다시 시도해주세요. / 加载失败,请刷新页面重试。</p>`;
-      return;
-    }
-    reviews = data;
-    renderReviews(reviews);
-  }
+  // 언어를 바꾸면 목록·검색 결과 수·오류 문구를 새 언어로 다시 그린다.
+  I18N.onChange(() => { fillSelects(); clearErrors(); formStatus.textContent = ""; renderReviews(); });
 </script>

@@ -68,6 +68,7 @@
 }
 
 *{box-sizing:border-box;}
+[hidden]{display:none !important;}
 body{
   margin:0;
   background:var(--paper);
@@ -89,7 +90,13 @@ body{
   max-width:760px; margin:0 auto; padding:12px 24px;
   display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap;
 }
-.brand{font-size:14px; font-weight:700; color:var(--ink); letter-spacing:0.01em; text-decoration:none;}
+.brand{font-size:14px; font-weight:700; color:var(--ink); letter-spacing:0.01em; text-decoration:none; white-space:nowrap;}
+.lang-btn{
+  flex:0 0 auto; font-size:12px; font-weight:700; padding:5px 11px; min-height:0;
+  border-radius:var(--radius-pill); border:1px solid var(--line);
+  background:var(--paper-raised); color:var(--ink-soft); white-space:nowrap;
+}
+.lang-btn:hover{border-color:var(--accent); color:var(--accent-ink); box-shadow:none;}
 .tabs{display:flex; gap:4px;}
 .tab-link{
   display:inline-flex; align-items:center; gap:5px;
@@ -124,7 +131,7 @@ h1{
   max-width:56ch;
 }
 .disclaimer{
-  font-size:12.5px; color:var(--ink-faint); margin-top:2px;
+  font-size:13.5px; line-height:1.7; color:var(--ink-soft); margin-top:2px;
 }
 
 .toolbar{
@@ -170,19 +177,37 @@ button:focus-visible, .btn:focus-visible, a:focus-visible{
 .notice .tx b{font-weight:700;}
 .notice .dt{font-size:11.5px; color:var(--ink-faint); font-variant-numeric:tabular-nums; white-space:nowrap;}
 
+/* 월 이동: 좌우 큰 화살표 버튼 + 가운데 "2026年10月" 제목 + 연/월 선택 + 오늘 버튼 */
 .cal-nav{
   display:flex; align-items:center; justify-content:space-between; gap:10px;
-  margin:20px 0 14px; flex-wrap:wrap;
+  margin:20px 0 14px;
+  background:var(--paper-raised); border-radius:var(--radius); box-shadow:var(--shadow);
+  padding:10px;
 }
-.cal-nav-select{display:flex; gap:6px;}
+.cal-arrow{
+  flex:0 0 auto; width:46px; height:46px; padding:0;
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:50%; background:var(--accent-soft); border:1px solid transparent; color:var(--accent-ink);
+}
+.cal-arrow svg{width:22px; height:22px; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round;}
+.cal-arrow:hover:not(:disabled){background:var(--accent); color:#fff; border-color:var(--accent);}
+.cal-arrow:disabled{opacity:0.3; background:var(--line-soft); color:var(--ink-faint);}
+.cal-nav-center{flex:1; min-width:0; display:flex; flex-direction:column; align-items:center; gap:8px;}
+.cal-title{font-size:20px; font-weight:700; line-height:1.2; letter-spacing:0.01em; font-variant-numeric:tabular-nums;}
+.cal-nav-select{display:flex; gap:6px; align-items:center; flex-wrap:wrap; justify-content:center;}
 .cal-nav-select select{
-  font:inherit; font-size:14px; color:var(--ink);
-  border:1px solid var(--line); background:var(--paper-raised);
-  border-radius:var(--radius-sm); padding:9px 10px; cursor:pointer;
+  font:inherit; font-size:13.5px; color:var(--ink);
+  border:1px solid var(--line); background:var(--paper);
+  border-radius:var(--radius-pill); padding:6px 12px; cursor:pointer;
 }
 .cal-nav-select select:focus-visible{
   outline:2px solid var(--focus); outline-offset:1px;
 }
+.cal-today{
+  font-size:13px; padding:6px 14px; border-radius:var(--radius-pill);
+  background:var(--blue-soft); border-color:transparent; color:var(--blue); font-weight:600;
+}
+.cal-today:hover{border-color:var(--blue); box-shadow:none;}
 
 .month-label{
   font-size:14px; font-weight:700; color:var(--ink);
@@ -198,10 +223,11 @@ button:focus-visible, .btn:focus-visible, a:focus-visible{
   grid-template-columns:repeat(7, minmax(0,1fr));
 }
 .cal-weekday{
-  font-size:11px; color:var(--ink-faint); text-align:center;
-  padding-bottom:6px; display:flex; flex-direction:column; line-height:1.3;
+  font-size:12px; color:var(--ink-faint); text-align:center;
+  padding-bottom:6px; line-height:1.3;
 }
-.cal-weekday-ko{font-size:9px; color:var(--ink-faint);}
+.cal-weekday.sun{color:var(--accent-ink);}
+.cal-weekday.sat{color:var(--blue);}
 
 /* 달력을 실제 표(table)처럼: 바깥 테두리는 그리드 컨테이너가, 안쪽 칸 사이 선은
    각 셀의 border-right/bottom이 담당해서 겹치는 두꺼운 선 없이 격자를 그린다.
@@ -302,8 +328,58 @@ button:focus-visible, .btn:focus-visible, a:focus-visible{
 
 footer{
   margin-top:40px; padding-top:20px; border-top:1px solid var(--line);
-  font-size:12.5px; color:var(--ink-faint);
+  font-size:13.5px; line-height:1.75; color:var(--ink-soft);
 }
+
+/* 댓글 입력칸: 로그인 전에는 입력칸 대신 안내 + 로그인 버튼을 보여준다 */
+.c-login{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  padding:14px 16px; border-radius:var(--radius-sm);
+  background:var(--paper-raised); border:1px dashed var(--ink-faint);
+  font-size:13.5px; color:var(--ink-soft);
+}
+.c-login button{font-size:13px; padding:7px 16px; border-radius:var(--radius-pill);}
+
+/* ---------- 강의평 검색 ---------- */
+.rev-search{position:relative; margin:0 0 6px;}
+.rev-search input{
+  width:100%; font:inherit; font-size:14.5px; color:var(--ink);
+  padding:12px 40px 12px 40px; border-radius:var(--radius-pill);
+  border:1px solid var(--line); background:var(--paper-raised); box-shadow:var(--shadow);
+}
+.rev-search input:focus{outline:2px solid var(--focus); outline-offset:1px;}
+.rev-search .s-ic{
+  position:absolute; left:14px; top:50%; width:18px; height:18px; transform:translateY(-50%);
+  fill:none; stroke:var(--ink-faint); stroke-width:2; stroke-linecap:round; pointer-events:none;
+}
+.rev-search .s-clear{
+  position:absolute; right:8px; top:50%; transform:translateY(-50%);
+  width:28px; height:28px; padding:0; border:0; border-radius:50%;
+  background:var(--line); color:var(--ink-soft); justify-content:center; font-size:14px; box-shadow:none;
+}
+.rev-search .s-clear[hidden]{display:none;}
+.rev-filters{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin:10px 0 0;}
+.rev-filters select{
+  font:inherit; font-size:14px; color:var(--ink); padding:9px 14px; border-radius:var(--radius-pill);
+  border:1px solid var(--line); background:var(--paper-raised); max-width:100%;
+}
+.rev-filters select:focus-visible{outline:2px solid var(--focus); outline-offset:1px;}
+.rev-filters .rev-reset{font-size:13px; padding:8px 14px; border-radius:var(--radius-pill);}
+.form-row select{
+  width:100%; font:inherit; color:var(--ink); padding:10px 12px; border-radius:10px;
+  border:1px solid var(--line); background:var(--paper-raised);
+}
+.term-badge{font-size:12px; color:var(--ink-soft); background:var(--line); padding:2px 9px; border-radius:var(--radius-pill);}
+.qna-link{text-align:center; margin:6px 0 28px; font-size:12px;}
+.qna-link a{color:var(--ink-faint); text-decoration:underline; text-underline-offset:3px;}
+.qna-link a:hover{color:var(--ink-soft);}
+.qna-reply{margin-top:12px; padding:10px 12px; border-radius:10px; background:var(--paper); border:1px solid var(--line); font-size:14px; line-height:1.6;}
+.qna-reply .qna-who{font-size:12px; font-weight:700; color:var(--accent-ink); margin-bottom:4px;}
+.qna-wait{font-size:12px; color:var(--ink-faint); margin-top:10px;}
+.qna-admin{margin-top:10px; display:flex; flex-direction:column; gap:8px;}
+.qna-admin textarea{width:100%; min-height:70px; font:inherit; font-size:14px; padding:10px 12px; border-radius:10px; border:1px solid var(--line); background:var(--paper-raised); color:var(--ink);}
+.qna-admin button{align-self:flex-start; font-size:13px; padding:7px 16px; border-radius:var(--radius-pill);}
+.rev-count{font-size:12.5px; color:var(--ink-faint); margin:8px 4px 10px;}
 
 /* ---------- 공용 로그인(auth.js) UI: board.html / reviews.html 공유 ---------- */
 .nav-auth{display:flex; align-items:center; gap:8px; white-space:nowrap;}
@@ -324,7 +400,9 @@ footer{
   background:var(--paper-raised); border:0; box-shadow:var(--shadow-md); border-radius:var(--radius);
   padding:22px; width:100%; max-width:340px;
 }
-.sheet h2{font-size:15px; margin:0 0 16px;}
+.sheet{position:relative;}
+.sheet h2{font-size:15px; margin:0 0 16px; padding-right:72px;}
+.sheet-lang{position:absolute; top:16px; right:16px;}
 .sheet label{display:block; font-size:12px; color:var(--ink-soft); margin-bottom:4px;}
 .sheet input{
   width:100%; font:inherit; font-size:14px; padding:9px 11px; border-radius:var(--radius-sm);
@@ -406,23 +484,19 @@ footer{
   }
   .form-actions{flex-wrap:wrap;}
 
-  /* 상단 탭/브랜드: 한국어 라벨과 구분자를 숨기고 중국어만 남겨 한 줄에 균등 배치 */
-  .tab-ko, .tab-sep, .brand-ko, .brand-sep{display:none;}
   .tab-link{padding:10px 12px;}
 
   /* 달력 이벤트 막대: tag-* 색은 그대로, 제목은 가장 작은 글자로 한 줄 표시 + 말줄임 */
   .cal-bar{height:14px; padding:0 4px;}
   .cal-bar-label{font-size:9px;}
 
-  /* 이전/다음 달 버튼: 중국어만 표시 */
-  .cal-nav-ko, .cal-nav-sep{display:none;}
-
-  /* 이전/다음 달 버튼 두 개를 한 줄, 연·월 select 두 개를 그 아래 한 줄로 배치 */
-  .cal-nav{display:grid; grid-template-columns:1fr 1fr; gap:8px;}
-  .cal-nav > button:first-child{grid-column:1; grid-row:1;}
-  .cal-nav > button:last-child{grid-column:2; grid-row:1;}
-  .cal-nav-select{grid-column:1 / -1; grid-row:2; display:grid; grid-template-columns:1fr 1fr; gap:8px;}
-  .cal-nav-select select{width:100%;}
+  /* 월 이동: 화살표를 조금 줄이고 연·월 선택은 한 줄에 */
+  .cal-nav{padding:8px; gap:6px;}
+  .cal-arrow{width:44px; height:44px;}
+  .cal-title{font-size:18px;}
+  .cal-nav-select select, button.cal-today{min-height:36px; padding:4px 12px;}
+  button.lang-btn, .nav-auth button{min-height:36px;}
+  footer{font-size:13px;}
 }
 
 @media (max-width:520px){
@@ -431,10 +505,17 @@ footer{
 }
 
 @media (max-width:480px){
+  .brand-name{display:none;}
+  .lang-btn{font-size:11.5px; padding:4px 9px;}
   /* 상단 탭 메뉴: 한자+한글 라벨이 줄바꿈되지 않도록 폰트를 줄이고 nowrap 처리 */
   .tabs{gap:2px;}
   .tab-link{font-size:11px; padding:6px 8px; gap:3px; white-space:nowrap;}
-  .tab-link .tab-ic{width:12px; height:12px;}
+  .tab-link .tab-ic{display:none;}
+  .tabs{margin-left:6px !important;}
+  .nav-auth{gap:4px;}
+  .nav-auth .who{display:none;}
+  .topnav-inner{padding:6px 12px; gap:6px;}
+  .nav-auth button{padding:4px 8px;}
 
   /* D-day 배지(dd) + 텍스트(tx) + 날짜(dt)가 좁은 화면에서 겹치거나 잘리지 않도록
      첫 줄은 배지-날짜, 둘째 줄은 전체 너비의 텍스트로 세로 정렬 */
