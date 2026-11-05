@@ -110,7 +110,7 @@ window.I18N = (function () {
       load_fail: "加载失败:",
       back: "← 返回",
       post_gone: "帖子不存在或已被删除。",
-      like: "共鸣", report: "举报", del: "删除",
+      like: "点赞", report: "举报", del: "删除",
       comments: "评论",
       comment_ph: "写评论…",
       comment_send: "发送", comment_sending: "发送中…",
