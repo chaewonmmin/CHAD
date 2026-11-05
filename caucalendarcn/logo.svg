@@ -1,18 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="蜜课">
-  <!-- 뒤쪽 파란 말풍선(대화 상대) -->
-  <ellipse cx="51" cy="44" rx="11" ry="9.5" fill="#3182F6"/>
-  <path d="M56 51.5 L60.5 60 L49 54 Z" fill="#3182F6"/>
-  <circle cx="48.5" cy="44" r="1.5" fill="#fff"/>
-  <circle cx="53.5" cy="44" r="1.5" fill="#fff"/>
-  <!-- 통통한 주황 말풍선 -->
-  <circle cx="30" cy="29" r="21" fill="#FF4D3D"/>
-  <path d="M17 44 L11 57 L28 49 Z" fill="#FF4D3D"/>
+  <!-- 꿀단지 몸통 -->
+  <path d="M15 20 C4 32 5 60 20 60 H44 C59 60 60 32 49 20 Z" fill="#FFB81C"/>
+  <!-- 입구에서 흐르는 꿀 -->
+  <path d="M15 20 H49 L51 24 V27 C51 32 45 32 45 27 Q45 25 42 25 H24 V29 C24 35 17 35 17 29 V25 H13 Z" fill="#FF9500"/>
+  <!-- 코랄 뚜껑 띠 -->
+  <rect x="10" y="10" width="44" height="13" rx="6.5" fill="#FF4D3D"/>
   <!-- 얼굴 -->
-  <circle cx="23" cy="29" r="2.8" fill="#1F2329"/>
-  <circle cx="37" cy="29" r="2.8" fill="#1F2329"/>
-  <circle cx="24" cy="28" r=".9" fill="#fff"/>
-  <circle cx="38" cy="28" r=".9" fill="#fff"/>
-  <ellipse cx="17.5" cy="35.5" rx="3.6" ry="2.3" fill="#FFB8AE"/>
-  <ellipse cx="42.5" cy="35.5" rx="3.6" ry="2.3" fill="#FFB8AE"/>
-  <path d="M26 35 Q30 40 34 35" fill="none" stroke="#1F2329" stroke-width="2.4" stroke-linecap="round"/>
+  <circle cx="24" cy="41" r="2.8" fill="#1F2329"/>
+  <circle cx="40" cy="41" r="2.8" fill="#1F2329"/>
+  <circle cx="25" cy="40" r=".9" fill="#fff"/>
+  <circle cx="41" cy="40" r=".9" fill="#fff"/>
+  <ellipse cx="18" cy="47" rx="3.6" ry="2.3" fill="#FF8A5C"/>
+  <ellipse cx="46" cy="47" rx="3.6" ry="2.3" fill="#FF8A5C"/>
+  <path d="M28 47 Q32 52 36 47" fill="none" stroke="#1F2329" stroke-width="2.4" stroke-linecap="round"/>
 </svg>
