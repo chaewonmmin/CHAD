@@ -253,7 +253,7 @@ create trigger reports_apply
 -- ---------------------------------------------------------------------
 drop view if exists public.posts_public;
 create view public.posts_public
-with (security_invoker = true) as
+with (security_invoker = false, security_barrier = true) as
 select
   p.id,
   p.title,
@@ -270,7 +270,7 @@ where not p.is_deleted and not p.is_hidden;
 
 drop view if exists public.comments_public;
 create view public.comments_public
-with (security_invoker = true) as
+with (security_invoker = false, security_barrier = true) as
 select
   c.id,
   c.post_id,
@@ -315,6 +315,13 @@ drop policy if exists posts_select_public on public.posts;
 create policy posts_select_public on public.posts
   for select using (not is_deleted and not is_hidden);
 
+-- 삭제는 is_deleted = true 로 바꾸는 update 입니다. Postgres 는 update 후의 행도
+-- select 정책을 통과해야 하므로, 작성자는 자기 행을 계속 볼 수 있어야 합니다.
+-- 공개 목록은 posts_public 뷰의 where 조건이 따로 걸러줍니다.
+drop policy if exists posts_select_own on public.posts;
+create policy posts_select_own on public.posts
+  for select to authenticated using (author_id = auth.uid());
+
 drop policy if exists posts_insert_own on public.posts;
 create policy posts_insert_own on public.posts
   for insert to authenticated
@@ -332,6 +339,13 @@ create policy posts_update_own on public.posts
 drop policy if exists comments_select_public on public.comments;
 create policy comments_select_public on public.comments
   for select using (not is_deleted and not is_hidden);
+
+-- 삭제는 is_deleted = true 로 바꾸는 update 입니다. Postgres 는 update 후의 행도
+-- select 정책을 통과해야 하므로, 작성자는 자기 행을 계속 볼 수 있어야 합니다.
+-- 공개 목록은 comments_public 뷰의 where 조건이 따로 걸러줍니다.
+drop policy if exists comments_select_own on public.comments;
+create policy comments_select_own on public.comments
+  for select to authenticated using (author_id = auth.uid());
 
 drop policy if exists comments_insert_own on public.comments;
 create policy comments_insert_own on public.comments
@@ -387,11 +401,11 @@ grant select on public.comments_public to anon, authenticated;
 grant select on public.profiles to anon, authenticated;
 grant update (nickname) on public.profiles to authenticated;
 
-grant select on public.posts to anon, authenticated;
+grant select (id) on public.posts to authenticated;
 grant insert (author_id, title, body, is_anonymous) on public.posts to authenticated;
 grant update (title, body, is_anonymous, is_deleted) on public.posts to authenticated;
 
-grant select on public.comments to anon, authenticated;
+grant select (id) on public.comments to authenticated;
 grant insert (post_id, author_id, body, is_anonymous) on public.comments to authenticated;
 grant update (body, is_deleted) on public.comments to authenticated;
 
